@@ -29,7 +29,7 @@ function inicializarEventos()
     });
 
 
-    $("#login").click(function(e) {
+    $("#panelControl").click(function(e) {
         presionEnlace(e, "aplicacion")
     });
 }
@@ -48,7 +48,14 @@ function inicializarEventosGestion() {
     $("#borrar").click(function(e) {
         presionEnlace(e, "gestion")
     });
+    
+    $("#crearCliente").click(function(e) {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+        if (validaForm("#crear")) {                               // Primero validará el formulario.
+            presionEnlace(e, "gestion");
+        }
+    });
 }
+
 
 //Accion cuando se clicka en el link
 function presionEnlace(e, id)
@@ -63,6 +70,26 @@ function presionEnlace(e, id)
 function cargarResultado(url, id)
 {
     $("#" + id).load(url);
+}  
+    
+function validaForm(){
+    $return = true;
+    $formulario = document.getElementsByName("crear")[0];
+    $errores = [];
+    
+    for(i=0;i<$formulario.elements.length;i++){
+        if($formulario.elements[i].value==="" && $formulario.elements[i].name==="requerido"){
+            $errores.push(i);
+        }
+    }
+    
+    if($errores){
+        $return = false;
+        for(i=0;i<$errores.length;i++){
+            document.getElementById(i+1).hidden=false;
+        }
+    }
+    return $return;
 }
 
 

@@ -1,7 +1,7 @@
 <?php
 $opcion = $_GET["menu"];
 
-echo "<div id=\"subtitulo\">Menu de " . $opcion;
+echo "<div id=\"subtitulo\">Menu de gestion de " . $opcion;
 echo "</div>
             <table id=\"submenu\">
                     <tr>
