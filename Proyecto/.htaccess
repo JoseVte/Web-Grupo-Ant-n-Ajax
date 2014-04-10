@@ -1,4 +1,0 @@
-DirectoryIndex App.php
-RewriteEngine on
-RewriteBase /Proyecto/
-RewriteRule ^Pages/(.+)/(.+) App.php?pageLoad=$1&tabla=$2 [NC]
