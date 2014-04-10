@@ -1,0 +1,17 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::Login/plantillaLogin.html.twig" %}
+
+
+
+
+{% block content %}
+<h1>Registro</h1>
+<form method="POST" action="{{path('dss_proyecto_registro')}}">
+    {{ form_row(form.NIF) }}
+    {{ form_row(form.pass, {'type': 'password'}) }}
+    {{ form_rest(form) }}
+    <input type="submit" />
+    </form>
+    {% if mensaje_error is defined %}
+    <span class="error">{{mensaje_error}}</span>
+    {% endif %}
+{% endblock %}

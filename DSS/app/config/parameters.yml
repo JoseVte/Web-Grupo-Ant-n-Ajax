@@ -1,0 +1,23 @@
+parameters:
+    #bases de datos
+    database_driver: pdo_mysql
+    database_host: localhost
+    database_port: null
+    database_name: base_datos_dss
+    database_user: dss
+    database_password: dss
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    locale: en
+    secret: b1d7c0cf5d0f0b313a3f016eae07e10f1887c3be
+    database_path: null
+    #ajax
+    ajax_aplicacion: 
+        class: ajax_36ap2458e
+        div: aplicacion
+    ajax_div_flotante: 
+        class: ajax_34fd114
+        div: div_flotante
+        form: form_a484848

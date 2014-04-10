@@ -1,0 +1,13 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
+
+
+{% block content %}
+    ¿Estas seguro de eliminar al {{tabla}} con Nif={{nif}} y todos sus datos?
+    <a class="{{ajax_div_flotante.class}}" href="{{path('dss_proyecto_gestion_eliminar',{'tabla':tabla,'nif':nif,'confirmacion':'si'})}}">
+    Confirmar
+    </a>
+    
+    {% if ajax == true %}
+             <a style="cursor:pointer" class="closeVentanaDeslizante">Salir</a>
+             {% endif %}
+    {% endblock %}

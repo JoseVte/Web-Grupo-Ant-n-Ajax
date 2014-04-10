@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('bundles/dssproyecto/imagenes/favicon.ico') }}" />
+        <script type="text/javascript" src="{{asset('bundles/dssproyecto/JS/jquery.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/dssproyecto/JS/jquery-ui.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/dssproyecto/JS/validation.js')}}"></script>
+        <script type="text/javascript" src="{{asset('bundles/dssproyecto/JS/angular.js')}}"></script>
+
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

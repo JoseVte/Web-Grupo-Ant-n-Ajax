@@ -1,0 +1,7 @@
+parameters:
+#    dss_proyecto.example.class: DSS\ProyectoBundle\Example
+
+services:
+#    dss_proyecto.example:
+#        class: %dss_proyecto.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

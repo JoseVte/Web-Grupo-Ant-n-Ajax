@@ -1,0 +1,13 @@
+<header>
+    <div class="herramientas">
+        <a id="inicio" href="{{path('dss_proyecto_homepage')}}" title="Inicio">
+            <img src="{{asset('bundles/dssproyecto/Imagenes/grupoanton-bocadillo.png')}}"></img></a>
+        <ul class="herramientas">
+            <li class="contabilidad"><a id="factura" class="{{ajax_aplicacion.class}}" href="{{ path('dss_proyecto_contabilidad', { 'tabla': 'factura' }) }}">Facturas</a></li>
+            <li class="contabilidad"><a id="albaran" class="{{ajax_aplicacion.class}}" href="{{ path('dss_proyecto_contabilidad', { 'tabla': 'albaran' }) }}">Albaranes</a></li>
+            <li class="contabilidad"><a id="presupuesto" class="{{ajax_aplicacion.class}}" href="{{ path('dss_proyecto_contabilidad', { 'tabla': 'presupuesto' }) }}">Presupuestos</a></li>
+            <li class="panelControl"><div id="Login">Hola, {{app.security.getToken().getUser().getUserName()}}
+                    <br/><a href="{{path('dss_proyecto_logout')}}">Cerrar Sesion</a></div></li>
+        </ul>
+    </div>
+    </header>

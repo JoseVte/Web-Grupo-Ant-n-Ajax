@@ -1,0 +1,4 @@
+dss_proyecto:
+    resource: "@DSSProyectoBundle/Resources/config/routing.yml"
+    prefix:   /
+

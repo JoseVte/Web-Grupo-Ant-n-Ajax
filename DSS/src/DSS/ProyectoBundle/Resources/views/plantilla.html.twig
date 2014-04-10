@@ -1,0 +1,89 @@
+{% extends "::base.html.twig" %}
+{% set ajax = false %}
+
+{% block title %}DSS!{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{asset('bundles/dssproyecto/css/estilo.css')}}"/>
+    <style type="text/css">
+        #div_flotante{
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+
+       
+
+        $(document).on("submit", "#{{ajax_div_flotante.form}}", function(event) {
+            event.preventDefault();
+            var url = $("#{{ajax_div_flotante.form}}").attr("action");
+            
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#{{ajax_div_flotante.form}}").serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    $("#{{ajax_div_flotante.div}}").html(data);
+                    $("#{{ajax_div_flotante.div}}").show("slow");
+                    $("#{{ajax_aplicacion.div}}").load(location.href);
+                }
+            });
+        });
+        $(document).on("click", "a.{{ajax_aplicacion.class}}", function(event) {
+            event.preventDefault();
+            var enlace = $(this).attr("href");
+            $("#{{ajax_aplicacion.div}}").load($(this).attr("href"), function() {
+
+                history.pushState({enlace: enlace}, null, enlace);
+            });
+        });
+        $(document).on("click", "a.{{ajax_div_flotante.class}}", function(event) {
+            event.preventDefault();
+            $("#{{ajax_div_flotante.div}}").load($(this).attr("href"), function() {
+                $("#{{ajax_div_flotante.div}}").show("slow");
+            });
+        });
+        $(document).on("click", "a.closeVentanaDeslizante", function(event) {
+            $("#{{ajax_div_flotante.div}}").hide("slow", function() {
+                $(this).html("");
+                $("#{{ajax_aplicacion.div}}").load(location.href);
+            });
+        });
+        window.onpopstate = function(event) {
+            if (event.state) {
+                var state = event.state;
+                $("#{{ajax_aplicacion.div}}").load(state.enlace);
+            }
+
+        };
+
+    </script>
+{% endblock %}
+
+{% block body %}
+
+    {% block header %}
+        {% include "DSSProyectoBundle::header.html.twig" %}
+    {% endblock %}
+
+    {% block nav %}
+        {% include "DSSProyectoBundle::navegacion.html.twig" %}
+    {% endblock %}
+
+
+
+    <article>
+        <section id="{{ajax_aplicacion.div}}">
+        {% block content %}{% endblock %}
+    </section>
+</article>
+<div id="{{ajax_div_flotante.div}}"></div>
+<footer>
+    {% block footer %}
+        Aplicacion desarrollada por el grupo P2G05
+    {% endblock %}
+</footer>
+{% endblock %}

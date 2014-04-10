@@ -1,0 +1,47 @@
+dss_proyecto_homepage:
+    pattern: /
+    defaults: { _controller: DSSProyectoBundle:Default:index }
+
+dss_proyecto_info:
+    pattern: /info
+    defaults: { _controller: DSSProyectoBundle:Default:info }
+    
+    
+dss_proyecto_contabilidad:
+    pattern: /contabilidad/{tabla}
+    defaults: { _controller: DSSProyectoBundle:Contabilidad:index }
+    
+dss_proyecto_gestion_listar:
+    pattern: /gestion/listar/{tabla}
+    defaults: { _controller: DSSProyectoBundle:Gestion:index}
+    
+dss_proyecto_gestion_crear:
+    pattern: /gestion/crear/{tabla}
+    defaults: { _controller: DSSProyectoBundle:Gestion:crear}
+    
+dss_proyecto_gestion_modificar:
+    pattern: /gestion/modificar/{tabla}/{nif}
+    defaults: { _controller: DSSProyectoBundle:Gestion:modificar}
+    
+dss_proyecto_gestion_eliminar:
+    pattern: /gestion/eliminar/{tabla}/{nif}
+    defaults: { _controller: DSSProyectoBundle:Gestion:eliminar}
+    
+dss_proyecto_login:
+    pattern: /registro/login
+    defaults: { _controller: DSSProyectoBundle:Login:login}
+    
+dss_proyecto_login_check:
+    pattern: /registro/login_check
+    
+dss_proyecto_logout:
+    pattern: /registro/logout
+    
+dss_proyecto_registro:
+    pattern: /registro/registro
+    defaults: { _controller: DSSProyectoBundle:Login:registro}
+   
+dss_proyecto_denegado:
+    pattern: /error403
+    defaults: { _controller: DSSProyectoBundle:Error:denegado}
+    

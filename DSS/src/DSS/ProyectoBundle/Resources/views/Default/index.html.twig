@@ -1,0 +1,9 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
+
+
+
+{% block content %}
+    <div id="subtitulo">
+    Bienvenido a la Aplicación de la Empresa.
+    </div>
+{% endblock %}

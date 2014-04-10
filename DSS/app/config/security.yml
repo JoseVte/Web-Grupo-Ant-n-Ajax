@@ -1,0 +1,36 @@
+security:
+        # aquí configuras las partes de la aplicación que se protegen
+    firewalls:
+        admin_area:
+            provider: usuario
+            pattern:    ^/
+            form_login:
+                login_path: dss_proyecto_login
+                check_path: dss_proyecto_login_check
+        
+            logout: 
+                path: /registro/logout
+            
+                
+            anonymous: ~
+
+        
+    access_control:
+        # aquí configuras qué usuarios pueden acceder a cada parte del sitio
+        - { path: ^/registro/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/registro/registro, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/error403, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/info, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/*,     roles: ROLE_ADMIN }
+        
+    providers:
+        # aquí configuras de dónde salen los usuarios de la aplicación
+        usuario:
+            entity: { class: DSS\ProyectoBundle\Entity\Usuario, property: NIF }
+        
+    encoders:
+        # aquí configuras cómo se codifican las contraseñas de cada usuario
+        DSS\ProyectoBundle\Entity\Usuario:
+            algorithm:        sha1
+            encode_as_base64: false
+            iterations:       1

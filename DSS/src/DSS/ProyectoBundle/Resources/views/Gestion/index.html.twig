@@ -1,0 +1,31 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
+
+
+
+{% block content %}
+    <div id="subtitulo">Menu de gestion de {{tabla}}</div>
+    <div id="enlaceCrear">
+        <a class="{{ajax_div_flotante.class}}" href="{{path('dss_proyecto_gestion_crear',{"tabla":tabla})}}">Añadir {{tabla}}</a>
+    </div>
+        <table class="listar" id="tabla{{tabla}}">
+                <tr>
+                    {% for elemento in cabecera %}
+                    <th>{{elemento| capitalize}}</th>
+                    {% endfor %}
+                    <th>Modificar</th>
+                    <th>Eliminar</th>
+                   
+                </tr>
+                
+                {% for usuario in usuarios %}
+                    
+                    <tr>
+                        {% for elemento in usuario %}
+                        <td>{{elemento}}</td>
+                        {% endfor %}
+                        <td><a class="{{ajax_div_flotante.class}}" href="{{path('dss_proyecto_gestion_modificar',{'tabla':tabla,'nif':usuario|first})}}">Modificar</a></td>
+                        <td><a class="{{ajax_div_flotante.class}}" href="{{path('dss_proyecto_gestion_eliminar',{'tabla':tabla,'nif':usuario|first})}}">Eliminar</a>
+                    </tr>
+                    {% endfor %}
+                </table>
+{% endblock %}

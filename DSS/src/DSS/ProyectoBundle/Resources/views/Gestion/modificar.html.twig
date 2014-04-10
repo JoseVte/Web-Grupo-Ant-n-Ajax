@@ -1,0 +1,18 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
+
+
+{% block content %}
+     <form id="{{ajax_div_flotante.form}}" method="POST" action="{{path('dss_proyecto_gestion_modificar',{"tabla":tabla,"nif":nif})}}">
+    {{ form_row(form.NIF, {'attr': {'readonly': true}}) }}
+    {{ form_rest(form)}}
+         {% if ajax == true %}
+             <a style="cursor:pointer" class="closeVentanaDeslizante">Salir</a>
+             {% endif %}
+    <input type="submit" />
+    </form>
+    {% if mensaje_error is defined %}
+    <span class="error">{{mensaje_error}}</span>
+    {% endif %}
+    
+    
+    {% endblock %}
