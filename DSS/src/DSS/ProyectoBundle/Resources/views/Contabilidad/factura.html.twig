@@ -1,0 +1,6 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
+
+
+{% block content %}
+    <a href="{{ path('dss_proyecto_contabilidad_factura', { '_format': 'pdf' }) }}" target="_blank">Generar</a> 
+{% endblock %}

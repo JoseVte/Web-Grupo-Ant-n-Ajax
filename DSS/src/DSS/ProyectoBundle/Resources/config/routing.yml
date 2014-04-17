@@ -6,6 +6,10 @@ dss_proyecto_info:
     pattern: /info
     defaults: { _controller: DSSProyectoBundle:Default:info }
     
+  
+dss_proyecto_contabilidad_factura:
+    pattern: /contabilidad/factura/{_format}
+    defaults: { _controller: DSSProyectoBundle:Contabilidad:factura }
     
 dss_proyecto_contabilidad:
     pattern: /contabilidad/{tabla}

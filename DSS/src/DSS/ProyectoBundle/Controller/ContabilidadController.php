@@ -8,6 +8,10 @@
 
 namespace DSS\ProyectoBundle\Controller;
 use \Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Ps\PdfBundle\Annotation\Pdf;
+
+
 /**
  * Description of ContabilidadController
  *
@@ -17,5 +21,15 @@ class ContabilidadController extends Controller {
     //put your code here
     public function indexAction($tabla){
         return $this->render('DSSProyectoBundle:Contabilidad:index.html.twig');
+    }
+    
+    /**
+     * @Pdf()
+     */
+    public function facturaAction(){
+        $format = $this->get('request')->get('_format');
+
+         return $this->render(sprintf('DSSProyectoBundle:Contabilidad:factura.%s.twig',$format));
+    
     }
 }
