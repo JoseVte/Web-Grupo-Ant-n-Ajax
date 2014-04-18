@@ -196,25 +196,25 @@
 	INSERT INTO Cliente (NIF,Nombre,Apellidos,Direccion,Telefono,Email) VALUES ('53246157F','Klara','Emerson','calle falsa 123','678123456','falso@asdf.qwerty');
 
 #Servicio (Rellenar los NULL)
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (1,'Servicio 1','Creacion de panfletos');
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (2,'Servicio 2','Creacion de ortadillas');
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (3,'Servicio 3','Creacion de flyer');
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (4,'Servicio 4','Creacion de anuncio de periodico');
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (5,'Servicio 5','Creacion de anuncio en carteles');
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (6,'Servicio 6','Creacion de anuncio en revistas');
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (7,'Servicio 7','Creacion de anuncio en radio');
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (8,'Servicio 8','Creacion de anuncio en television');
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (9,'Servicio 9','Creacion de anuncio en la web');
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (10,'Servicio 10',NULL);
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (11,'Servicio 11',NULL);
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (12,'Servicio 12',NULL);
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (13,'Servicio 13',NULL);
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (14,'Servicio 14',NULL);
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (15,'Servicio 15',NULL);
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (16,'Servicio 16',NULL);
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (17,'Servicio 17',NULL);
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (18,'Servicio 18',NULL);
-	INSERT INTO Servicio (idServicio,Nombre,Descripcion) VALUES (19,'Servicio 19',NULL);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (1,'Servicio 1','Creacion de panfletos',100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (2,'Servicio 2','Creacion de ortadillas',100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (3,'Servicio 3','Creacion de flyer',100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (4,'Servicio 4','Creacion de anuncio de periodico',100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (5,'Servicio 5','Creacion de anuncio en carteles',100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (6,'Servicio 6','Creacion de anuncio en revistas',100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (7,'Servicio 7','Creacion de anuncio en radio',100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (8,'Servicio 8','Creacion de anuncio en television',100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (9,'Servicio 9','Creacion de anuncio en la web',100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (10,'Servicio 10',NULL,100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (11,'Servicio 11',NULL,100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (12,'Servicio 12',NULL,100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (13,'Servicio 13',NULL,100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (14,'Servicio 14',NULL,100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (15,'Servicio 15',NULL,100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (16,'Servicio 16',NULL,100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (17,'Servicio 17',NULL,100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (18,'Servicio 18',NULL,100);
+	INSERT INTO Servicio (idServicio,Nombre,Descripcion,Precio) VALUES (19,'Servicio 19',NULL,100);
 
 #Pedido (Añadir mas si se requiere)
 	INSERT INTO Pedido (Identificador,Proveedor_NIF,Cliente_NIF) VALUES (1,'12138685K','53246157F');
@@ -337,3 +337,4 @@
 
 update Usuario set Pass=sha1(Pass) where !(Nombre like("root"));
 
+#select * from Servicio s,LineaServicio l where s.idServicio=l.Servicio_idServicio and l.Pedido_Identificador="Num pedido"

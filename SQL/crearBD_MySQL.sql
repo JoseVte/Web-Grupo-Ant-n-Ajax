@@ -33,6 +33,7 @@ CREATE TABLE Servicio (
   idServicio INTEGER UNSIGNED  NOT NULL   AUTO_INCREMENT,
   Nombre VARCHAR(45)  NOT NULL  ,
   Descripcion VARCHAR(255)  NULL    ,
+  Precio DOUBLE  NOT NULL,
 PRIMARY KEY(idServicio));
 
 
