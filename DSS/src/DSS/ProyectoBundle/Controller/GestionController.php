@@ -24,13 +24,10 @@ class GestionController extends Controller {
 
         $table = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->findAll();
         $cabecera = $em->getClassMetadata('DSSProyectoBundle:' . ucwords($tabla))->getFieldNames();
-        $usuarios = array();
-        foreach ($table as $valor) {
-            $usuarios[] = (array) $valor;
-        }
+        
 
 
-        return $this->render('DSSProyectoBundle:Gestion:index.html.twig', array('tabla' => $tabla, 'cabecera' => $cabecera, 'usuarios' => $usuarios));
+        return $this->render('DSSProyectoBundle:Gestion:'.$tabla.'.html.twig', array('tabla' => $tabla, 'cabecera' => $cabecera, 'table' => $table));
     }
 
     public function crearAction($tabla) {
