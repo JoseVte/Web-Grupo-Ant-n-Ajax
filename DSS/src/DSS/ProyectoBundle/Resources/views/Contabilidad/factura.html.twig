@@ -2,5 +2,7 @@
 
 
 {% block content %}
-    <a href="{{ path('dss_proyecto_contabilidad_factura', { '_format': 'pdf' }) }}" target="_blank">Generar</a> 
+    {% for factura in facturas %}
+        <a href="{{ path('dss_proyecto_contabilidad_factura', { '_format': 'pdf','pedido':factura.pedidoIdentificador }) }}" target="_blank">Factura del pedido {{factura.pedidoIdentificador}}</a> <br>
+    {% endfor %}
 {% endblock %}

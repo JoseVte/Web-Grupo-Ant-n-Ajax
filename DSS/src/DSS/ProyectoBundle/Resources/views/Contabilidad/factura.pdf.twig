@@ -13,18 +13,18 @@
                 <td>
                     <p color="#AD1919">MODELO DE PRESUPUESTO</p>
                     <p  color="#AD1919">DATOS EMISOR</p>
-
-                    <p><span color="#AD1919">CIF:</span> CIF</p>
-                    <p><span color="#AD1919">DIRECCION:</span> DIRECCION</p>
-                    <p><span color="#AD1919">CP:</span> CP</p>
-                    <p><span color="#AD1919">TLF:</span> TLF</p>
-                    <p><span color="#AD1919">FAX:</span> FAX</p>
-                    <p><span color="#AD1919">EMAIL:</span> EMAIL</p>
+                     {% for p in proveedor %}
+                    <p><span color="#AD1919">CIF:</span> {{p.nif}}</p>
+                    <p><span color="#AD1919">DIRECCION:</span> {{p.direccion}}</p>
+                    <p><span color="#AD1919">TLF:</span> {{p.telefono}}</p>
+                    
+                    <p><span color="#AD1919">EMAIL:</span> {{p.email}}</p>
+{% endfor %}
                 </td>
             </tr>
             <tr>
                 <td>
-                    <p><span color="#AD1919"> Nº Presupuesto:</span> 0</p>
+                    
 
                 </td>
                 <td>
@@ -34,42 +34,42 @@
         </table>
         <hr></hr>
         <p><span color="#AD1919">DATOS CLIENTE:</span></p>
-        <p><span color="#AD1919">Nombre:</span> Nombre</p>
-        <p><span color="#AD1919">NIF:</span> Nif</p>
-        <p><span color="#AD1919">Direccion: </span> Direccion </p>
-        <p><span color="#AD1919">CP:</span> CP</p>
+        <p><span color="#AD1919">Nombre:</span> {{usuario.nombre}}</p>
+        <p><span color="#AD1919">NIF:</span> {{usuario.nif}}</p>
+        <p><span color="#AD1919">Direccion: </span> {{usuario.direccion}} </p>
         
         <p><span color="#AD1919">Gracias por su interés en nuestros servicios. Esta es la factura</span></p>
         
         <table>
              <tr>
                 <td>
-                    Concepto
+                    Nombre
                 </td>
                 <td>
-                    Cantidad
+                    Descripcion
                 </td>
                 <td>
                     Precio
                 </td>
-                <td>
-                    Total
-                </td>
+                
             </tr>
+            {% for servicio in servicios %}
             <tr>
+                
                 <td>
-                    Prueba0
+                    {{servicio.nombre}}
                 </td>
                 <td>
-                    Prueba1
+                   {{servicio.descripcion}}
                 </td>
                 <td>
-                    Prueba2
+                    {{servicio.precio}}
                 </td>
-                <td>
-                    Prueba3
-                </td>
+                
+                
+                
             </tr>
+            {% endfor %}
         </table>
         
 
