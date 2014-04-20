@@ -30,7 +30,7 @@ class ContabilidadController extends Controller {
         $format = $this->get('request')->get('_format');
         $pedido_id = $this->get('request')->get('pedido');
         
-        $usuario=$this->get('security.context')->getToken()->getUser();
+        
         
         $em = $this->getDoctrine()->getManager();
 
@@ -55,6 +55,17 @@ $facturas = $query_facturas->getResult();
         
      $proveedor=$query_proveedor->getResult();
      
+     $query_cliente = $em->createQuery(
+            'SELECT c
+            FROM DSSProyectoBundle:Cliente c
+            JOIN DSSProyectoBundle:Pedido pedido
+            WHERE pedido.clienteNIF=c.NIF AND
+            pedido.id= :id
+            '
+        )->setParameter('id',$pedido_id);
+        
+     $cliente=$query_cliente->getResult();
+     
       $query_servicios = $em->createQuery(
             'SELECT s
             FROM DSSProyectoBundle:Servicio s
@@ -69,7 +80,7 @@ $facturas = $query_facturas->getResult();
        
          return $this->render(sprintf('DSSProyectoBundle:Contabilidad:factura.%s.twig',$format),array(
                     // last username entered by the user
-                    'usuario' => $usuario,
+                    'cliente' => $cliente,
              'facturas'=>$facturas,
                     'proveedor'=> $proveedor,
                  'servicios'=>$servicios

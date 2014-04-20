@@ -34,10 +34,11 @@
         </table>
         <hr></hr>
         <p><span color="#AD1919">DATOS CLIENTE:</span></p>
-        <p><span color="#AD1919">Nombre:</span> {{usuario.nombre}}</p>
-        <p><span color="#AD1919">NIF:</span> {{usuario.nif}}</p>
-        <p><span color="#AD1919">Direccion: </span> {{usuario.direccion}} </p>
-        
+        {% for c in cliente %}
+        <p><span color="#AD1919">Nombre:</span> {{c.nombre}}</p>
+        <p><span color="#AD1919">NIF:</span> {{c.nif}}</p>
+        <p><span color="#AD1919">Direccion: </span> {{c.direccion}} </p>
+        {% endfor %}
         <p><span color="#AD1919">Gracias por su interés en nuestros servicios. Esta es la factura</span></p>
         
         <table>
