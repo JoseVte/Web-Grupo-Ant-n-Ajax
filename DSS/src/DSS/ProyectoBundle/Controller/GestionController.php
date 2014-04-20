@@ -47,7 +47,7 @@ class GestionController extends Controller {
             //   los dato son válidos o no y en caso de ser así
             if ($form->isValid()) {
 
-                $em = $this->getDoctrine()->getEntityManager();
+                $em = $this->getDoctrine()->getManager();
                 $tablaEN = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->find($table->getNif());
                 if ($tablaEN == null) {
                     if($tabla=="usuario"){
@@ -76,7 +76,7 @@ class GestionController extends Controller {
     public function modificarAction($tabla, $nif) {
         $request = $this->getRequest();
        
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $table = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->find($nif);
         $form_object = '\DSS\ProyectoBundle\Form\\' . ucwords($tabla) . 'Type';
@@ -105,7 +105,7 @@ class GestionController extends Controller {
         
         $request=$this->getRequest();
         if($request->query->has("confirmacion")){
-           $em = $this->getDoctrine()->getEntityManager();
+           $em = $this->getDoctrine()->getManager();
 
            $table = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->find($nif);
            $em->remove($table);
