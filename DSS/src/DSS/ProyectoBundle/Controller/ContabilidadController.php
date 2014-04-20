@@ -76,6 +76,18 @@ $facturas = $query_facturas->getResult();
         )->setParameter('id',$pedido_id);
         
      $servicios=$query_servicios->getResult();
+     
+     $total = 0;
+        foreach ($servicios as $servicio) {
+            $total += $servicio->getPrecio();
+        }
+        
+    
+    
+    $iva= 5;
+    
+    $total_iva=$total+$total*$iva/100;
+     
 
        
          return $this->render(sprintf('DSSProyectoBundle:Contabilidad:factura.%s.twig',$format),array(
@@ -83,7 +95,10 @@ $facturas = $query_facturas->getResult();
                     'cliente' => $cliente,
              'facturas'=>$facturas,
                     'proveedor'=> $proveedor,
-                 'servicios'=>$servicios
+                 'servicios'=>$servicios,
+             'total'=>$total,
+             'iva'=>$iva,
+             'total_iva'=>$total_iva
                         ));
     
     }

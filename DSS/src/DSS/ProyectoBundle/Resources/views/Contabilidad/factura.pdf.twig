@@ -71,6 +71,44 @@
                 
             </tr>
             {% endfor %}
+            
+            <tr background.color="#901a32">
+                <td>
+                    
+                </td>
+                
+                <td>
+                    <strong>Total</strong>
+                </td>
+                <td>
+                    <strong>{{total}}</strong>
+                </td>
+            </tr>
+            <tr background.color="#901a32">
+                
+                <td>
+                    
+                </td>
+                <td>
+                    <strong>IVA({{iva}}%)</strong>
+                </td>
+                <td>
+                    <strong>{{total*iva/100}}€</strong>
+                    
+                </td>
+            </tr>
+            <tr background.color="#901a32">
+                
+                <td>
+                    
+                </td>
+                <td>
+                    <strong>Total con IVA</strong>
+                </td>
+                <td>
+                    <strong>{{total_iva}}€</strong>
+                </td>
+            </tr>
         </table>
         
 
