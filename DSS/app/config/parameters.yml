@@ -12,8 +12,8 @@ parameters:
     mailer_password: null
     locale: en
     secret: b1d7c0cf5d0f0b313a3f016eae07e10f1887c3be
-    
-     #ajax
+
+ #ajax
     ajax_aplicacion: 
         class: ajax_36ap2458e
         div: aplicacion

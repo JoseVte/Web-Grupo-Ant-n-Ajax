@@ -25,7 +25,6 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Ps\\PdfBundle' => array($vendorDir . '/psliwa/pdf-bundle'),
     'PHPPdf' => array($vendorDir . '/psliwa/php-pdf/lib'),
-    'Monolog' => array($vendorDir . '/monolog/monolog/src'),
     'Incenteev\\ParameterHandler' => array($vendorDir . '/incenteev/composer-parameter-handler'),
     'Imagine' => array($vendorDir . '/psliwa/php-pdf/lib'),
     'Doctrine\\ORM\\' => array($vendorDir . '/doctrine/orm/lib'),
