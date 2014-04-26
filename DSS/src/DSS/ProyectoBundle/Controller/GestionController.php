@@ -118,5 +118,9 @@ class GestionController extends Controller {
         }
         
     }
+    
+    public function panelAction() {
+        return $this->render('DSSProyectoBundle:Gestion:panel.html.twig');
+    }
 
 }

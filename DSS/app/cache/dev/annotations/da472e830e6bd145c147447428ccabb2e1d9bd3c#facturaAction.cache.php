@@ -1,0 +1,1 @@
+<?php return unserialize('a:1:{i:0;O:27:"Ps\\PdfBundle\\Annotation\\Pdf":4:{s:10:"stylesheet";N;s:18:"documentParserType";s:3:"xml";s:7:"headers";a:0:{}s:11:"enableCache";b:0;}}');

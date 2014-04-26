@@ -41,6 +41,10 @@ dss_proyecto_login_check:
 dss_proyecto_logout:
     pattern: /registro/logout
     
+dss_proyecto_panel_control:
+    pattern: /gestion/panelControl
+    defaults: { _controller: DSSProyectoBundle:Gestion:panel}
+
 dss_proyecto_registro:
     pattern: /registro/registro
     defaults: { _controller: DSSProyectoBundle:Login:registro}
