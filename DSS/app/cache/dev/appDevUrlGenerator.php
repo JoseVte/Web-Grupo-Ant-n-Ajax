@@ -44,6 +44,7 @@ class appDevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
         'dss_proyecto_panel_control' => array (  0 =>   array (  ),  1 =>   array (    '_controller' => 'DSS\\ProyectoBundle\\Controller\\GestionController::panelAction',  ),  2 =>   array (  ),  3 =>   array (    0 =>     array (      0 => 'text',      1 => '/gestion/panelControl',    ),  ),  4 =>   array (  ),),
         'dss_proyecto_registro' => array (  0 =>   array (  ),  1 =>   array (    '_controller' => 'DSS\\ProyectoBundle\\Controller\\LoginController::registroAction',  ),  2 =>   array (  ),  3 =>   array (    0 =>     array (      0 => 'text',      1 => '/registro/registro',    ),  ),  4 =>   array (  ),),
         'dss_proyecto_denegado' => array (  0 =>   array (  ),  1 =>   array (    '_controller' => 'DSS\\ProyectoBundle\\Controller\\ErrorController::denegadoAction',  ),  2 =>   array (  ),  3 =>   array (    0 =>     array (      0 => 'text',      1 => '/error403',    ),  ),  4 =>   array (  ),),
+        'dss_proyecto_modificarPass' => array (  0 =>   array (    0 => 'nif',  ),  1 =>   array (    '_controller' => 'DSS\\ProyectoBundle\\Controller\\GestionController::modificarPassAction',  ),  2 =>   array (  ),  3 =>   array (    0 =>     array (      0 => 'variable',      1 => '/',      2 => '[^/]++',      3 => 'nif',    ),    1 =>     array (      0 => 'text',      1 => '/gestion/modificarPass',    ),  ),  4 =>   array (  ),),
     );
 
     /**

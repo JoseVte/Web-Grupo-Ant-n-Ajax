@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.6
+-- version 4.1.12
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 19-04-2014 a las 16:25:40
+-- Tiempo de generación: 29-04-2014 a las 16:50:43
 -- Versión del servidor: 5.6.16
--- Versión de PHP: 5.5.9
+-- Versión de PHP: 5.5.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -465,6 +465,27 @@ INSERT INTO `Ingreso` (`Identificador`, `NombreOperacion`, `Coste`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `IVA`
+--
+
+DROP TABLE IF EXISTS `IVA`;
+CREATE TABLE IF NOT EXISTS `IVA` (
+  `id` int(10) unsigned NOT NULL,
+  `valor` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `IVA`
+--
+
+INSERT INTO `IVA` (`id`, `valor`) VALUES
+(1, 21),
+(2, 16);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `LineaServicio`
 --
 
@@ -664,6 +685,7 @@ CREATE TABLE IF NOT EXISTS `Servicio` (
   `Nombre` varchar(45) NOT NULL,
   `Descripcion` varchar(255) DEFAULT NULL,
   `Precio` double NOT NULL,
+  `IVA` int(11) NOT NULL,
   PRIMARY KEY (`idServicio`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
 
@@ -671,26 +693,26 @@ CREATE TABLE IF NOT EXISTS `Servicio` (
 -- Volcado de datos para la tabla `Servicio`
 --
 
-INSERT INTO `Servicio` (`idServicio`, `Nombre`, `Descripcion`, `Precio`) VALUES
-(1, 'Servicio 1', 'Creacion de panfletos', 100),
-(2, 'Servicio 2', 'Creacion de ortadillas', 100),
-(3, 'Servicio 3', 'Creacion de flyer', 100),
-(4, 'Servicio 4', 'Creacion de anuncio de periodico', 100),
-(5, 'Servicio 5', 'Creacion de anuncio en carteles', 100),
-(6, 'Servicio 6', 'Creacion de anuncio en revistas', 100),
-(7, 'Servicio 7', 'Creacion de anuncio en radio', 100),
-(8, 'Servicio 8', 'Creacion de anuncio en television', 100),
-(9, 'Servicio 9', 'Creacion de anuncio en la web', 100),
-(10, 'Servicio 10', NULL, 100),
-(11, 'Servicio 11', NULL, 100),
-(12, 'Servicio 12', NULL, 100),
-(13, 'Servicio 13', NULL, 100),
-(14, 'Servicio 14', NULL, 100),
-(15, 'Servicio 15', NULL, 100),
-(16, 'Servicio 16', NULL, 100),
-(17, 'Servicio 17', NULL, 100),
-(18, 'Servicio 18', NULL, 100),
-(19, 'Servicio 19', NULL, 100);
+INSERT INTO `Servicio` (`idServicio`, `Nombre`, `Descripcion`, `Precio`, `IVA`) VALUES
+(1, 'Servicio 1', 'Creacion de panfletos', 100, 1),
+(2, 'Servicio 2', 'Creacion de ortadillas', 100, 1),
+(3, 'Servicio 3', 'Creacion de flyer', 100, 2),
+(4, 'Servicio 4', 'Creacion de anuncio de periodico', 100, 1),
+(5, 'Servicio 5', 'Creacion de anuncio en carteles', 100, 1),
+(6, 'Servicio 6', 'Creacion de anuncio en revistas', 100, 1),
+(7, 'Servicio 7', 'Creacion de anuncio en radio', 100, 1),
+(8, 'Servicio 8', 'Creacion de anuncio en television', 100, 1),
+(9, 'Servicio 9', 'Creacion de anuncio en la web', 100, 1),
+(10, 'Servicio 10', NULL, 100, 1),
+(11, 'Servicio 11', NULL, 100, 1),
+(12, 'Servicio 12', NULL, 100, 1),
+(13, 'Servicio 13', NULL, 100, 1),
+(14, 'Servicio 14', NULL, 100, 1),
+(15, 'Servicio 15', NULL, 100, 1),
+(16, 'Servicio 16', NULL, 100, 1),
+(17, 'Servicio 17', NULL, 100, 1),
+(18, 'Servicio 18', NULL, 100, 1),
+(19, 'Servicio 19', NULL, 100, 2);
 
 -- --------------------------------------------------------
 
@@ -716,7 +738,7 @@ CREATE TABLE IF NOT EXISTS `Usuario` (
 --
 
 INSERT INTO `Usuario` (`NIF`, `Nombre`, `Apellidos`, `NvAcceso`, `Pass`, `Direccion`, `Telefono`, `Email`) VALUES
-('00000000A', 'root', NULL, 'Maximo', 'dc76e9f0c0006e8f919e0c515c66dbba3982f785', 'c/root', '666999666', 'root@root.org'),
+('00000000A', 'root', NULL, 'ROLE_ADMIN', 'dc76e9f0c0006e8f919e0c515c66dbba3982f785', 'c/root', '666999666', 'root@root.org'),
 ('08011026B', 'Nathan', 'Young', 'Minimo', 'f3d040edc80ff9d786284b23669e4dac52d5bb73', 'calle falsa 123', '678456231', 'inventado@falso.org'),
 ('10963613L', 'Jeffery', 'Stannard', 'Intermedio', '3b38f57a9971668cf1268d65de5d8fc94b90f8b3', 'calle falsa 123', '678456231', 'inventado@falso.org'),
 ('12787163Z', 'Dick', NULL, 'Alto', 'da55b5597ceae1fefaa10674dcf855c2fa288c97', 'calle falsa 123', '678456231', 'inventado@falso.org'),
@@ -729,6 +751,7 @@ INSERT INTO `Usuario` (`NIF`, `Nombre`, `Apellidos`, `NvAcceso`, `Pass`, `Direcc
 ('37671633W', 'Amy', 'Little', 'Intermedio', 'b4789905e966b4ee8dad2a57fa4ac996158120b9', 'calle falsa 123', '678456231', 'inventado@falso.org'),
 ('45949884R', 'Conor', 'Duvall', 'Intermedio', 'a0cd8f48fd9bbca529092400878938fa26fc37c6', 'calle falsa 123', '678456231', 'inventado@falso.org'),
 ('48675340A', 'Pablo', 'Guijarro Ramirez', 'ROLE_ADMIN', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'Avd. Fotografo Francisco Cano', '965657613', 'sky10pg@gmail.com'),
+('48764103D', 'Jose Vicente', 'Romero', 'Bajo', '7bfb37ea85d953f3861167e87344cdacd5807d5d', 'Logroño 19', '669832255', 'jvortsromero@gmail.com'),
 ('62744229E', 'Cathy', NULL, 'Intermedio', 'b17e620da7e04c3715c7f8bca968425f9d060dfb', 'calle falsa 123', '678456231', 'inventado@falso.org'),
 ('85389868E', 'Lizzy', NULL, 'Intermedio', 'd2fc98bd41749a6a6223cc3b48f13c7bab9b54de', 'calle falsa 123', '678456231', 'inventado@falso.org'),
 ('85651511V', 'Fabian', 'Mariojnisk', 'Alto', '75e62e88e90d640d25cfd5dd93ea276723362984', 'calle falsa 123', '678456231', 'inventado@falso.org'),

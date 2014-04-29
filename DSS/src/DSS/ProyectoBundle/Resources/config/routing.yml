@@ -53,3 +53,6 @@ dss_proyecto_denegado:
     pattern: /error403
     defaults: { _controller: DSSProyectoBundle:Error:denegado}
     
+dss_proyecto_modificarPass:
+    pattern: /gestion/modificarPass/{nif}
+    defaults: { _controller: DSSProyectoBundle:Gestion:modificarPass }

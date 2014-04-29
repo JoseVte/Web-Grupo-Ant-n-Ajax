@@ -32,33 +32,40 @@ class __TwigTemplate_63e33d343928631140d9ecbd720a6d38a1e5fb381b076147b380ec69b40
         echo $this->env->getExtension('routing')->getPath("dss_proyecto_gestion_listar", array("tabla" => "proveedor"));
         echo "\">Proveedores</a>
         <label hidden=\"true\" id=\"proveedorFlecha\" name=\"flechaIz_proveedor\"><a class=\"flechaIz\"></a></label></li>
-        <li><a id=\"usuario\" class=\"";
-        // line 7
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["ajax_aplicacion"]) ? $context["ajax_aplicacion"] : $this->getContext($context, "ajax_aplicacion")), "class"), "html", null, true);
-        echo "\"  href=\"";
-        echo $this->env->getExtension('routing')->getPath("dss_proyecto_gestion_listar", array("tabla" => "usuario"));
-        echo "\">Usuarios</a>
-        <label hidden=\"true\" id=\"usuarioFlecha\" name=\"flechaIz_usuario\"><a class=\"flechaIz\"></a></label></li>
-    </ul>
+        
+        ";
+        // line 8
+        if (($this->getAttribute($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["app"]) ? $context["app"] : $this->getContext($context, "app")), "security"), "getToken", array(), "method"), "getUser", array(), "method"), "getNvAcceso", array(), "method") == "ROLE_ADMIN")) {
+            // line 9
+            echo "            <li><a id=\"usuario\" class=\"";
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["ajax_aplicacion"]) ? $context["ajax_aplicacion"] : $this->getContext($context, "ajax_aplicacion")), "class"), "html", null, true);
+            echo "\"  href=\"";
+            echo $this->env->getExtension('routing')->getPath("dss_proyecto_gestion_listar", array("tabla" => "usuario"));
+            echo "\">Usuarios</a>
+            <label hidden=\"true\" id=\"usuarioFlecha\" name=\"flechaIz_usuario\"><a class=\"flechaIz\"></a></label></li>
+        ";
+        }
+        // line 12
+        echo "    </ul>
         <ul class='social'>
         <li><img src=\"";
-        // line 11
+        // line 14
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/dssproyecto/images/instagram.png"), "html", null, true);
         echo "\"></li>
         <li><img src=\"";
-        // line 12
+        // line 15
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/dssproyecto/images/pinterest.png"), "html", null, true);
         echo "\"></li>
         <li><img src=\"";
-        // line 13
+        // line 16
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/dssproyecto/images/linkedin.png"), "html", null, true);
         echo "\"></li>
         <li><img src=\"";
-        // line 14
+        // line 17
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/dssproyecto/images/twitter.png"), "html", null, true);
         echo "\"></li>
         <li><img src=\"";
-        // line 15
+        // line 18
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/dssproyecto/images/facebook.png"), "html", null, true);
         echo "\"></li>
         
@@ -66,15 +73,15 @@ class __TwigTemplate_63e33d343928631140d9ecbd720a6d38a1e5fb381b076147b380ec69b40
     </ul>
     <ul class='miembrosde'>
         <li><img src=\"";
-        // line 20
+        // line 23
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/dssproyecto/images/miembrosde1.png"), "html", null, true);
         echo "\"></li>
         <li><img src=\"";
-        // line 21
+        // line 24
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/dssproyecto/images/miembrosde2.png"), "html", null, true);
         echo "\"></li>
         <li><img src=\"";
-        // line 22
+        // line 25
         echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("bundles/dssproyecto/images/miembrosde3.png"), "html", null, true);
         echo "\"></li>
     </ul>
@@ -94,6 +101,6 @@ class __TwigTemplate_63e33d343928631140d9ecbd720a6d38a1e5fb381b076147b380ec69b40
 
     public function getDebugInfo()
     {
-        return array (  78 => 22,  74 => 21,  70 => 20,  62 => 15,  58 => 14,  54 => 13,  50 => 12,  46 => 11,  37 => 7,  30 => 5,  52 => 10,  48 => 9,  42 => 8,  36 => 7,  32 => 6,  27 => 4,  23 => 3,  19 => 1,  29 => 6,  26 => 5,);
+        return array (  85 => 25,  81 => 24,  77 => 23,  69 => 18,  65 => 17,  61 => 16,  57 => 15,  53 => 14,  49 => 12,  40 => 9,  38 => 8,  30 => 5,  56 => 11,  52 => 10,  48 => 9,  42 => 8,  36 => 7,  32 => 6,  27 => 4,  23 => 3,  19 => 1,  29 => 6,  26 => 5,);
     }
 }

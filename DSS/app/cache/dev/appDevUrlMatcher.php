@@ -221,6 +221,11 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\ErrorController::denegadoAction',  '_route' => 'dss_proyecto_denegado',);
         }
 
+        // dss_proyecto_modificarPass
+        if (0 === strpos($pathinfo, '/gestion/modificarPass') && preg_match('#^/gestion/modificarPass/(?P<nif>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'dss_proyecto_modificarPass')), array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\GestionController::modificarPassAction',));
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

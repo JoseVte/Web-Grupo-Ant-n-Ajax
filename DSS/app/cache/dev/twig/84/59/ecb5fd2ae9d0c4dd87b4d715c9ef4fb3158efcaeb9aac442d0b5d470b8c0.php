@@ -30,7 +30,12 @@ class __TwigTemplate_8459ecb5fd2ae9d0c4dd87b4d715c9ef4fb3158efcaeb9aac442d0b5d47
     <h1>Panel de control</h1>
 
     <br>Cambiar email
-    <br>Cambiar pass
+    <br><a class=\"";
+        // line 9
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["ajax_div_flotante"]) ? $context["ajax_div_flotante"] : $this->getContext($context, "ajax_div_flotante")), "class"), "html", null, true);
+        echo "\" href=\"";
+        echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("dss_proyecto_modificarPass", array("nif" => $this->getAttribute($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["app"]) ? $context["app"] : $this->getContext($context, "app")), "security"), "getToken", array(), "method"), "getUser", array(), "method"), "getNif", array(), "method"))), "html", null, true);
+        echo "\">Cambiar pass</a>
     <br><a class=\"";
         // line 10
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["ajax_div_flotante"]) ? $context["ajax_div_flotante"] : $this->getContext($context, "ajax_div_flotante")), "class"), "html", null, true);
@@ -63,6 +68,6 @@ class __TwigTemplate_8459ecb5fd2ae9d0c4dd87b4d715c9ef4fb3158efcaeb9aac442d0b5d47
 
     public function getDebugInfo()
     {
-        return array (  45 => 13,  43 => 12,  36 => 10,  29 => 5,  26 => 4,);
+        return array (  50 => 13,  48 => 12,  41 => 10,  35 => 9,  29 => 5,  26 => 4,);
     }
 }

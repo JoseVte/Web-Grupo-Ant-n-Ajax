@@ -16,10 +16,6 @@ background-color: #eeeeee;
 /* height: 36em; */
 }
 
-a {
-color: #000;
-}
-
 #titulo {
     color: #D1D1D1;
     font-size: 50px;
@@ -51,10 +47,7 @@ color: #000;
     width: 80%;
     background: #D1D1D1;
 }
-#panelControl {
-    text-decoration: none;
-    color: white;
-}
+
 #panelDeControl {
     text-decoration: none;
     color: white;
@@ -150,13 +143,27 @@ body > header > div.herramientas > ul.herramientas > li.contabilidad:hover,li.pa
 }
 body > header > div.herramientas > ul.herramientas > li.panelControl{
     float: right;
+    color: white;
 }
 body > header > div.herramientas > ul.herramientas > li > a {
     text-decoration: none;
     color: white;
     border-bottom: none;
 }
+
 body > header > div.herramientas > ul.herramientas > li:hover> a {
+    text-decoration-line: underline ;
+    color: white;
+    border-bottom: 2px  solid white;
+}
+
+body > header > div.herramientas > ul.herramientas > li > div > a {
+    text-decoration: none;
+    color: white;
+    border-bottom: none;
+}
+
+body > header > div.herramientas > ul.herramientas > li:hover> div > a {
     text-decoration-line: underline ;
     color: white;
     border-bottom: 2px  solid white;

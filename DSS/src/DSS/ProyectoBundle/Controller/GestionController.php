@@ -123,4 +123,29 @@ class GestionController extends Controller {
         return $this->render('DSSProyectoBundle:Gestion:panel.html.twig');
     }
 
+    public function modificarPassAction($nif) {
+        $request = $this->getRequest();
+       
+        $em = $this->getDoctrine()->getManager();
+
+        $table = $em->getRepository('DSSProyectoBundle:' . ucwords('usuarioPass'))->find($nif);
+        $form_object = '\DSS\ProyectoBundle\Form\UsuarioPassType'; 
+        
+        $form = $this->createForm(new $form_object, $table);
+        if ($request->getMethod() == 'POST') {
+            $form->submit($request);
+
+            if ($form->isValid()) {
+                
+                $em->persist($table);
+                $em->flush();
+           return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje'=>'Se ha modificado correctamente'));
+            }
+        } 
+
+            return $this->render('DSSProyectoBundle:Gestion:modificarPass.html.twig', array(
+                        'form' => $form->createView(),
+                        'nif' => $nif
+            ));
+    }
 }

@@ -4,8 +4,11 @@
         <label hidden="true" id="clienteFlecha" name="flechaIz_cliente"><a class="flechaIz"></a></label></li>
         <li><a id="proveedor" class="{{ajax_aplicacion.class}}" href="{{ path('dss_proyecto_gestion_listar', { 'tabla': 'proveedor' }) }}">Proveedores</a>
         <label hidden="true" id="proveedorFlecha" name="flechaIz_proveedor"><a class="flechaIz"></a></label></li>
-        <li><a id="usuario" class="{{ajax_aplicacion.class}}"  href="{{ path('dss_proyecto_gestion_listar', { 'tabla': 'usuario' }) }}">Usuarios</a>
-        <label hidden="true" id="usuarioFlecha" name="flechaIz_usuario"><a class="flechaIz"></a></label></li>
+        
+        {% if (app.security.getToken().getUser().getNvAcceso() == 'ROLE_ADMIN') %}
+            <li><a id="usuario" class="{{ajax_aplicacion.class}}"  href="{{ path('dss_proyecto_gestion_listar', { 'tabla': 'usuario' }) }}">Usuarios</a>
+            <label hidden="true" id="usuarioFlecha" name="flechaIz_usuario"><a class="flechaIz"></a></label></li>
+        {% endif %}
     </ul>
         <ul class='social'>
         <li><img src="{{asset('bundles/dssproyecto/images/instagram.png')}}"></li>
