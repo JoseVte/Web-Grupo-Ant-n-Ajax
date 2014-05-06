@@ -43,18 +43,23 @@ class __TwigTemplate_648546b52b5af1c80cbfc78f03e447590eeb4d58431457ecff6769ff1c6
         echo "\" href=\"";
         echo $this->env->getExtension('routing')->getPath("dss_proyecto_contabilidad", array("tabla" => "presupuesto"));
         echo "\">Presupuestos</a></li>
-            <li class=\"panelControl\"><div id=\"Login\">Hola, ";
-        // line 9
+            <li class=\"panelControl\">
+                <div id=\"Login\">
+                <ul class=\"login\">
+                    <li>Hola, ";
+        // line 12
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["app"]) ? $context["app"] : $this->getContext($context, "app")), "security"), "getToken", array(), "method"), "getUser", array(), "method"), "getUserName", array(), "method"), "html", null, true);
-        echo "
-                    <br/><a href=\"";
-        // line 10
+        echo "</li>
+                    <li><a href=\"";
+        // line 13
         echo $this->env->getExtension('routing')->getPath("dss_proyecto_panel_control");
-        echo "\">Panel de control</a>
-                    <br/><a href=\"";
-        // line 11
+        echo "\">Panel de control</a></li>
+                    <li><a href=\"";
+        // line 14
         echo $this->env->getExtension('routing')->getPath("dss_proyecto_logout");
-        echo "\">Cerrar Sesion</a></div></li>
+        echo "\">Cerrar Sesion</a></li>
+                </ul>
+                </div></li>
         </ul>
     </div>
     </header>";
@@ -72,6 +77,6 @@ class __TwigTemplate_648546b52b5af1c80cbfc78f03e447590eeb4d58431457ecff6769ff1c6
 
     public function getDebugInfo()
     {
-        return array (  56 => 11,  52 => 10,  48 => 9,  42 => 8,  36 => 7,  32 => 6,  27 => 4,  23 => 3,  19 => 1,  29 => 6,  26 => 5,);
+        return array (  42 => 8,  36 => 7,  27 => 4,  19 => 1,  86 => 16,  81 => 15,  70 => 5,  64 => 17,  61 => 16,  59 => 14,  52 => 11,  48 => 10,  44 => 9,  35 => 7,  33 => 6,  23 => 3,  229 => 87,  226 => 86,  221 => 81,  217 => 75,  214 => 74,  211 => 73,  207 => 71,  204 => 70,  201 => 69,  196 => 89,  194 => 86,  189 => 84,  185 => 82,  183 => 81,  179 => 80,  173 => 76,  171 => 73,  168 => 72,  166 => 69,  163 => 68,  160 => 67,  149 => 59,  140 => 53,  135 => 51,  128 => 47,  124 => 46,  119 => 44,  111 => 39,  105 => 36,  98 => 32,  94 => 31,  90 => 30,  84 => 27,  76 => 6,  71 => 20,  65 => 16,  62 => 15,  51 => 12,  43 => 5,  37 => 4,  32 => 6,  55 => 13,  53 => 12,  46 => 6,  40 => 8,  34 => 8,  29 => 5,  26 => 4,);
     }
 }

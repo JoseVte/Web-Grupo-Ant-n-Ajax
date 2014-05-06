@@ -1,0 +1,27 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
+
+{% block content %}
+    <form id="{{ajax_div_flotante.form}}" method="POST" action="{{path('dss_proyecto_modificar_email',{"tabla":'usuario',"nif":nif})}}">
+        <div>
+        {{ form_label(form.email,'Correo antiguo: ') }}
+        {{ form_errors(form.email) }}
+        {{ form_widget(form.email) }}
+        </div>
+        <div>
+        {{ form_label(form.emailNuevo,'Correo nuevo: ') }}
+        {{ form_errors(form.emailNuevo) }}
+        {{ form_widget(form.emailNuevo) }}
+        </div>
+        <div>
+        {{ form_label(form.emailNuevo2,'Repetir correo nuevo: ') }}
+        {{ form_errors(form.emailNuevo2) }}
+        {{ form_widget(form.emailNuevo2) }}
+        </div>
+        <input type="submit" />
+    {{ form_end(form) }}
+        
+    {% if mensaje_error is defined %}
+    <span class="error">{{mensaje_error}}</span>
+    {% endif %}
+    <a style="cursor:pointer" class="closeVentanaDeslizante">Salir</a>
+{% endblock %}

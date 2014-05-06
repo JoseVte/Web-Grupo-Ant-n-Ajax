@@ -1,0 +1,27 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
+
+{% block content %}
+    <form id="{{ajax_div_flotante.form}}" method="POST" action="{{path('dss_proyecto_modificar_pass',{"tabla":'usuario',"nif":nif})}}">
+        <div>
+        {{ form_label(form.pass,'Contraseña antigua: ') }}
+        {{ form_errors(form.pass) }}
+        {{ form_widget(form.pass) }}
+        </div>
+        <div>
+        {{ form_label(form.passNuevo,'Contraseña nueva: ') }}
+        {{ form_errors(form.passNuevo) }}
+        {{ form_widget(form.passNuevo) }}
+        </div>
+        <div>
+        {{ form_label(form.passNuevo2,'Repetir contraseña nueva: ') }}
+        {{ form_errors(form.passNuevo2) }}
+        {{ form_widget(form.passNuevo2) }}
+        </div>
+        <input type="submit" />
+    {{ form_end(form) }}
+        
+    {% if mensaje_error is defined %}
+    <span class="error">{{mensaje_error}}</span>
+    {% endif %}
+    <a style="cursor:pointer" class="closeVentanaDeslizante">Salir</a>
+{% endblock %}

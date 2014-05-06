@@ -5,8 +5,8 @@
 
     <h1>Panel de control</h1>
 
-    <br>Cambiar email
-    <br><a class="{{ajax_div_flotante.class}}" href="{{ path('dss_proyecto_modificarPass', {'nif': app.security.getToken().getUser().getNif()}) }}">Cambiar pass</a>
+    <br><a class="{{ajax_div_flotante.class}}" href="{{ path('dss_proyecto_modificar_email', { 'tabla': 'usuario','nif': app.security.getToken().getUser().getNif()}) }}">Cambiar Email</a>
+    <br><a class="{{ajax_div_flotante.class}}" href="{{ path('dss_proyecto_modificar_pass', { 'tabla': 'usuario','nif': app.security.getToken().getUser().getNif()}) }}">Cambiar pass</a>
     <br><a class="{{ajax_div_flotante.class}}" href ="{{ path('dss_proyecto_gestion_eliminar', { 'tabla': 'usuario','nif': app.security.getToken().getUser().getNif() }) }}">Borrar usuario</a>
 
     {% if (app.security.getToken().getUser().getNvAcceso() == 'ROLE_ADMIN') %}

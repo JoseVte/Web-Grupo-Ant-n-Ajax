@@ -24,10 +24,8 @@ class GestionController extends Controller {
 
         $table = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->findAll();
         $cabecera = $em->getClassMetadata('DSSProyectoBundle:' . ucwords($tabla))->getFieldNames();
-        
 
-
-        return $this->render('DSSProyectoBundle:Gestion:'.$tabla.'.html.twig', array('tabla' => $tabla, 'cabecera' => $cabecera, 'table' => $table));
+        return $this->render('DSSProyectoBundle:Gestion:' . $tabla . '.html.twig', array('tabla' => $tabla, 'cabecera' => $cabecera, 'table' => $table));
     }
 
     public function crearAction($tabla) {
@@ -50,13 +48,12 @@ class GestionController extends Controller {
                 $em = $this->getDoctrine()->getManager();
                 $tablaEN = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->find($table->getNif());
                 if ($tablaEN == null) {
-                    if($tabla=="usuario"){
+                    if ($tabla == "usuario") {
                         $table->setPass(sha1($table->getPass()));
                     }
                     $em->persist($table);
                     $em->flush();
-                               return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje'=>'Se ha creado correctamente'));
-
+                    return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje' => 'Se ha creado correctamente'));
                 } else {
                     return $this->render('DSSProyectoBundle:Gestion:crear.html.twig', array(
                                 'form' => $form->createView(),
@@ -75,7 +72,7 @@ class GestionController extends Controller {
 
     public function modificarAction($tabla, $nif) {
         $request = $this->getRequest();
-       
+
         $em = $this->getDoctrine()->getManager();
 
         $table = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->find($nif);
@@ -86,66 +83,124 @@ class GestionController extends Controller {
             $form->submit($request);
 
             if ($form->isValid()) {
-                
+
                 $em->persist($table);
                 $em->flush();
-           return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje'=>'Se ha modificado correctamente'));
+                return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje' => 'Se ha modificado correctamente'));
             }
-        } 
+        }
 
-            return $this->render('DSSProyectoBundle:Gestion:modificar.html.twig', array(
-                        'form' => $form->createView(),
-                        'tabla' => $tabla,
-                        'nif' => $nif
-            ));
-        
+        return $this->render('DSSProyectoBundle:Gestion:modificar.html.twig', array(
+                    'form' => $form->createView(),
+                    'tabla' => $tabla,
+                    'nif' => $nif
+        ));
     }
 
     public function eliminarAction($tabla, $nif) {
-        
-        $request=$this->getRequest();
-        if($request->query->has("confirmacion")){
-           $em = $this->getDoctrine()->getManager();
 
-           $table = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->find($nif);
-           $em->remove($table);
-           $em->flush();
-           
-           return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje'=>'Se ha eliminado correctamente'));
-        }else{
-           return $this->render('DSSProyectoBundle:Gestion:eliminar.html.twig', array('tabla' => $tabla, 'nif' => $nif));
+        $request = $this->getRequest();
+        if ($request->query->has("confirmacion")) {
+            $em = $this->getDoctrine()->getManager();
 
+            $table = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->find($nif);
+            $em->remove($table);
+            $em->flush();
+
+            return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje' => 'Se ha eliminado correctamente'));
+        } else {
+            return $this->render('DSSProyectoBundle:Gestion:eliminar.html.twig', array('tabla' => $tabla, 'nif' => $nif));
         }
-        
     }
-    
+
     public function panelAction() {
         return $this->render('DSSProyectoBundle:Gestion:panel.html.twig');
     }
 
-    public function modificarPassAction($nif) {
+    public function modificarPassAction($tabla, $nif) {
         $request = $this->getRequest();
-       
+
         $em = $this->getDoctrine()->getManager();
 
-        $table = $em->getRepository('DSSProyectoBundle:' . ucwords('usuarioPass'))->find($nif);
-        $form_object = '\DSS\ProyectoBundle\Form\UsuarioPassType'; 
-        
-        $form = $this->createForm(new $form_object, $table);
+        $table = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->find($nif);
+
+        $form = $this->createFormBuilder()
+                ->add('pass', 'password')
+                ->add('passNuevo', 'password')
+                ->add('passNuevo2', 'password')
+                ->getForm();
+
+
+
         if ($request->getMethod() == 'POST') {
             $form->submit($request);
-
+            
             if ($form->isValid()) {
-                
-                $em->persist($table);
-                $em->flush();
-           return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje'=>'Se ha modificado correctamente'));
-            }
-        } 
 
-            return $this->render('DSSProyectoBundle:Gestion:modificarPass.html.twig', array(
-                        'form' => $form->createView(),
-                        'nif' => $nif
-            ));
+                $passAnt = sha1($form->get('pass')->getData());
+                
+                $pass1 = $form->get('passNuevo')->getData();
+                $pass2 = $form->get('passNuevo2')->getData();
+                
+                if (($pass1 == $pass2) && ($passAnt == $table->getPass())){
+                    $table->setPass(sha1($pass1));
+
+                    $em->persist($table);
+                    $em->flush();
+                    return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje' => 'Se ha modificado correctamente'));
+                }
+            }
+            return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje' => 'Error'));
+        }
+
+
+        return $this->render('DSSProyectoBundle:Gestion:modificar_pass.html.twig', array(
+                    'form' => $form->createView(),
+                    'nif' => $nif
+        ));
+    }
+
+    public function modificarEmailAction($tabla, $nif) {
+        $request = $this->getRequest();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $table = $em->getRepository('DSSProyectoBundle:' . ucwords($tabla))->find($nif);
+
+        $form = $this->createFormBuilder()
+                ->add('email', 'text')
+                ->add('emailNuevo', 'text')
+                ->add('emailNuevo2', 'text')
+                ->getForm();
+
+
+
+        if ($request->getMethod() == 'POST') {
+            $form->submit($request);
+            
+            if ($form->isValid()) {
+
+                $emailAnt = $form->get('email')->getData();
+                
+                $email1 = $form->get('emailNuevo')->getData();
+                $email2 = $form->get('emailNuevo2')->getData();
+                
+                if (($email1 == $email2) && ($emailAnt == $table->getEmail())){
+                    $table->setEmail($email1);
+
+                    $em->persist($table);
+                    $em->flush();
+                    return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje' => 'Se ha modificado correctamente'));
+                }
+                
+            }
+            return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje' => 'Error'));
+        }
+
+
+        return $this->render('DSSProyectoBundle:Gestion:modificar_email.html.twig', array(
+                    'form' => $form->createView(),
+                    'nif' => $nif
+        ));
     }
 }

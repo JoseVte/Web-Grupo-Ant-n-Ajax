@@ -221,9 +221,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\ErrorController::denegadoAction',  '_route' => 'dss_proyecto_denegado',);
         }
 
-        // dss_proyecto_modificarPass
-        if (0 === strpos($pathinfo, '/gestion/modificarPass') && preg_match('#^/gestion/modificarPass/(?P<nif>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'dss_proyecto_modificarPass')), array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\GestionController::modificarPassAction',));
+        if (0 === strpos($pathinfo, '/gestion/modificar_')) {
+            // dss_proyecto_modificar_pass
+            if (0 === strpos($pathinfo, '/gestion/modificar_pass') && preg_match('#^/gestion/modificar_pass/(?P<tabla>[^/]++)/(?P<nif>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'dss_proyecto_modificar_pass')), array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\GestionController::modificarPassAction',));
+            }
+
+            // dss_proyecto_modificar_email
+            if (0 === strpos($pathinfo, '/gestion/modificar_email') && preg_match('#^/gestion/modificar_email/(?P<tabla>[^/]++)/(?P<nif>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'dss_proyecto_modificar_email')), array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\GestionController::modificarEmailAction',));
+            }
+
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
