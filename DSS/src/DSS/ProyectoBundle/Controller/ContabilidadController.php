@@ -7,10 +7,10 @@
  */
 
 namespace DSS\ProyectoBundle\Controller;
+
 use \Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use DSS\ProyectoBundle\Entity\Usuario;
 use Ps\PdfBundle\Annotation\Pdf;
-
 
 /**
  * Description of ContabilidadController
@@ -18,88 +18,145 @@ use Ps\PdfBundle\Annotation\Pdf;
  * @author pablo
  */
 class ContabilidadController extends Controller {
+
     //put your code here
-    public function indexAction($tabla){
+    public function indexAction($tabla) {
         return $this->render('DSSProyectoBundle:Contabilidad:index.html.twig');
     }
-    
+
     /**
      * @Pdf()
      */
-    public function facturaAction(){
+    public function facturaAction() {
         $format = $this->get('request')->get('_format');
         $pedido_id = $this->get('request')->get('pedido');
-        
-        
-        
+
+
+
         $em = $this->getDoctrine()->getManager();
 
         $query_facturas = $em->createQuery(
-            'SELECT f
+                'SELECT f
             FROM DSSProyectoBundle:Factura f
             JOIN DSSProyectoBundle:Pedido p
             WHERE p.id=f.id
             '
-);//->setParameter('nif', $usuario->getNif());
+        ); //->setParameter('nif', $usuario->getNif());
 
-$facturas = $query_facturas->getResult();
+        $facturas = $query_facturas->getResult();
 
         $query_proveedor = $em->createQuery(
-            'SELECT p
+                        'SELECT p
             FROM DSSProyectoBundle:Proveedor p
             JOIN DSSProyectoBundle:Pedido pedido
             WHERE pedido.proveedorNIF=p.NIF AND
             pedido.id= :id
             '
-        )->setParameter('id',$pedido_id);
-        
-     $proveedor=$query_proveedor->getResult();
-     
-     $query_cliente = $em->createQuery(
-            'SELECT c
+                )->setParameter('id', $pedido_id);
+
+        $proveedor = $query_proveedor->getResult();
+
+        $query_cliente = $em->createQuery(
+                        'SELECT c
             FROM DSSProyectoBundle:Cliente c
             JOIN DSSProyectoBundle:Pedido pedido
             WHERE pedido.clienteNIF=c.NIF AND
             pedido.id= :id
             '
-        )->setParameter('id',$pedido_id);
-        
-     $cliente=$query_cliente->getResult();
-     
-      $query_servicios = $em->createQuery(
-            'SELECT s
+                )->setParameter('id', $pedido_id);
+
+        $cliente = $query_cliente->getResult();
+
+        $query_servicios = $em->createQuery(
+                        'SELECT s
             FROM DSSProyectoBundle:Servicio s
             JOIN DSSProyectoBundle:LineaServicio ls
             WHERE s.id=ls.servicioIdServicio AND
             ls.pedidoIdentificador = :id
             '
-        )->setParameter('id',$pedido_id);
-        
-     $servicios=$query_servicios->getResult();
-     
-     $total = 0;
+                )->setParameter('id', $pedido_id);
+
+        $servicios = $query_servicios->getResult();
+
+        $total = 0;
         foreach ($servicios as $servicio) {
             $total += $servicio->getPrecio();
         }
-        
-    
-    
-    $iva= 5;
-    
-    $total_iva=$total+$total*$iva/100;
-     
 
-       
-         return $this->render(sprintf('DSSProyectoBundle:Contabilidad:factura.%s.twig',$format),array(
+
+
+        $iva = 5;
+
+        $total_iva = $total + $total * $iva / 100;
+
+
+
+        return $this->render(sprintf('DSSProyectoBundle:Contabilidad:factura.%s.twig', $format), array(
                     // last username entered by the user
                     'cliente' => $cliente,
-             'facturas'=>$facturas,
-                    'proveedor'=> $proveedor,
-                 'servicios'=>$servicios,
-             'total'=>$total,
-             'iva'=>$iva,
-             'total_iva'=>$total_iva
-                        ));
+                    'facturas' => $facturas,
+                    'proveedor' => $proveedor,
+                    'servicios' => $servicios,
+                    'total' => $total,
+                    'iva' => $iva,
+                    'total_iva' => $total_iva
+        ));
+    }
+
+    public function pedidoAction() {
+        $request = $this->getRequest();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $pedidos = $em->createQuery('SELECT pe.id,p.nombre proveedor,c.nombre cliente
+            FROM DSSProyectoBundle:Pedido pe,
+            DSSProyectoBundle:Cliente c,
+            DSSProyectoBundle:Proveedor p
+            WHERE pe.proveedorNIF = p.NIF
+            AND pe.clienteNIF = c.NIF
+            ')->getResult();
+        
+
+        return $this->render('DSSProyectoBundle:Contabilidad:pedido.html.twig', array(
+                    'listado' => $pedidos
+        ));
+    }
+
+    function detallesAction($id){
+        $em = $this->getDoctrine()->getManager();
+        
+        $servicios = $em->createQuery('SELECT s.nombre,s.descripcion,((s.precio*i.valor/100)+s.precio) precioIva
+            FROM DSSProyectoBundle:LineaServicio ls,
+            DSSProyectoBundle:Servicio s,
+            DSSProyectoBundle:IVA i
+            WHERE s.id=ls.servicioIdServicio AND
+            ls.pedidoIdentificador = :id AND i.id=s.iva
+            ')->setParameter('id', $id)->getResult();
+        
+        return $this->render('DSSProyectoBundle:Contabilidad:listar.html.twig', array('servicios' => $servicios));       
+    }
     
+    function crearAction(){
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $query_servicios = $em->createQuery('SELECT s,i.valor FROM DSSProyectoBundle:Servicio s 
+                JOIN DSSProyectoBundle:IVA i
+                WHERE i.id=s.iva');
+        $servicios = $query_servicios->getResult();
+
+        $form = $this->createFormBuilder();
+
+        foreach ($servicios as $servicio) {
+            $total = $servicio[0]->getPrecio() + ($servicio["valor"] * $servicio[0]->getPrecio() / 100 );
+
+            $form->add('servicio' . $servicio[0]->getId(), 'checkbox', array(
+                'label' => $servicio[0] . ': ' . $total . '€',
+                'value' => $servicio[0]->getId(),
+                'required' => false
+            ));
+        }
+        
+        return $this->render('DSSProyectoBundle:Contabilidad:crear.html.twig',array('form' => $form->getForm()->createView()));
     }
 }

@@ -97,6 +97,7 @@
   'DSSProyectoBundle:Gestion:panel.html.twig' => '/opt/lampp/htdocs/dss_p2g05/DSS/src/DSS/ProyectoBundle/Resources/views/Gestion/panel.html.twig',
   'DSSProyectoBundle:Gestion:usuario.html.twig' => '/opt/lampp/htdocs/dss_p2g05/DSS/src/DSS/ProyectoBundle/Resources/views/Gestion/usuario.html.twig',
   'DSSProyectoBundle:Contabilidad:index.html.twig' => '/opt/lampp/htdocs/dss_p2g05/DSS/src/DSS/ProyectoBundle/Resources/views/Contabilidad/index.html.twig',
+  'DSSProyectoBundle:Contabilidad:pedido.html.twig' => '/opt/lampp/htdocs/dss_p2g05/DSS/src/DSS/ProyectoBundle/Resources/views/Contabilidad/pedido.html.twig',
   'DSSProyectoBundle:Contabilidad:factura.html.twig' => '/opt/lampp/htdocs/dss_p2g05/DSS/src/DSS/ProyectoBundle/Resources/views/Contabilidad/factura.html.twig',
   'DSSProyectoBundle:Contabilidad:factura.pdf.twig' => '/opt/lampp/htdocs/dss_p2g05/DSS/src/DSS/ProyectoBundle/Resources/views/Contabilidad/factura.pdf.twig',
   'DSSProyectoBundle::header.html.twig' => '/opt/lampp/htdocs/dss_p2g05/DSS/src/DSS/ProyectoBundle/Resources/views/header.html.twig',

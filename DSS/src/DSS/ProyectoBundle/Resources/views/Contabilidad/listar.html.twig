@@ -1,0 +1,21 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
+
+
+{% block content %}
+
+<table>
+    {% for serv in servicios %}
+    <tr>
+        <td>{{serv.nombre}}</td>
+        <td>{{serv.descripcion}}</td>
+        <td>{{serv.precioIva}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+    
+
+    {% if ajax == true %}
+             <a style="cursor:pointer" class="closeVentanaDeslizante">Salir</a>
+             {% endif %}
+    {% endblock%}

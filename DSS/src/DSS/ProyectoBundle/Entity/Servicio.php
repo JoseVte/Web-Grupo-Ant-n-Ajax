@@ -41,6 +41,13 @@ class Servicio
      * @ORM\Column(name="Precio", type="float")
      */
     private $precio;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="IVA", type="integer")
+     */
+    private $iva;
 
 
     /**
@@ -121,4 +128,22 @@ class Servicio
     {
         return $this->precio;
     }
+    
+    public function getIva() {
+        return $this->iva;
+    }
+
+    public function setIva($iva) {
+        $this->iva = $iva;
+    }
+
+        
+    public function __toString() {
+        if($this->descripcion!=NULL){
+            return $this->getDescripcion();
+        }else{
+            return $this->getNombre();
+        }
+    }
+
 }

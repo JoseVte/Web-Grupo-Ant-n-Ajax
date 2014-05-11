@@ -1,0 +1,27 @@
+{% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
+
+{% block content %}
+
+<a class="{{ajax_div_flotante.class}}" href="{{path('dss_proyecto_contabilidad_crear')}}">Crear pedido</a>
+
+<table>
+    <tr>
+        <th>Num. pedido</th>
+        <th>Proveedor</th>
+        <th>Cliente</th>
+        <th>Detalles</th>
+    </tr>
+
+    {% for pedido in listado %}
+
+    <tr>
+        <td>{{pedido.id}}</td>
+        <td>{{pedido.proveedor}}</td>
+        <td>{{pedido.cliente}}</td>
+        <td><a class="{{ajax_div_flotante.class}}" href="{{path('dss_proyecto_contabilidad_detalles',{'id':pedido.id})}}">Detalles</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}

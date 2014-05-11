@@ -74,8 +74,10 @@ body {
     float: left;
 }
 
-/* Ventana de modificar */
-
+form.pedido > div > label{
+    width: 300px;
+    float: left;
+}
 
 /* Ventana de crear */
 #div_flotante{

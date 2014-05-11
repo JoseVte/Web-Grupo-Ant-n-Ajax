@@ -11,10 +11,6 @@ dss_proyecto_contabilidad_factura:
     pattern: /contabilidad/factura/{_format}
     defaults: { _controller: DSSProyectoBundle:Contabilidad:factura }
     
-dss_proyecto_contabilidad:
-    pattern: /contabilidad/{tabla}
-    defaults: { _controller: DSSProyectoBundle:Contabilidad:index }
-    
 dss_proyecto_gestion_listar:
     pattern: /gestion/listar/{tabla}
     defaults: { _controller: DSSProyectoBundle:Gestion:index}
@@ -60,3 +56,16 @@ dss_proyecto_modificar_pass:
 dss_proyecto_modificar_email:
     pattern: /gestion/modificar_email/{tabla}/{nif}
     defaults: { _controller: DSSProyectoBundle:Gestion:modificarEmail }
+    
+dss_proyecto_contabilidad_pedido:
+    pattern: /contabilidad/pedido
+    defaults: { _controller: DSSProyectoBundle:Contabilidad:pedido }
+
+dss_proyecto_contabilidad_detalles:
+    pattern: /contabilidad/detalles/{id}
+    defaults: { _controller: DSSProyectoBundle:Contabilidad:detalles }
+    
+dss_proyecto_contabilidad_crear:
+    pattern: /contabilidad/crear
+    defaults: { _controller: DSSProyectoBundle:Contabilidad:crear }
+    

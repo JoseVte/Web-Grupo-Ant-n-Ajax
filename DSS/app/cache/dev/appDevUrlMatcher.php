@@ -149,17 +149,9 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             return array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\DefaultController::infoAction',  '_route' => 'dss_proyecto_info',);
         }
 
-        if (0 === strpos($pathinfo, '/contabilidad')) {
-            // dss_proyecto_contabilidad_factura
-            if (0 === strpos($pathinfo, '/contabilidad/factura') && preg_match('#^/contabilidad/factura/(?P<_format>[^/]++)$#s', $pathinfo, $matches)) {
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'dss_proyecto_contabilidad_factura')), array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\ContabilidadController::facturaAction',));
-            }
-
-            // dss_proyecto_contabilidad
-            if (preg_match('#^/contabilidad/(?P<tabla>[^/]++)$#s', $pathinfo, $matches)) {
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'dss_proyecto_contabilidad')), array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\ContabilidadController::indexAction',));
-            }
-
+        // dss_proyecto_contabilidad_factura
+        if (0 === strpos($pathinfo, '/contabilidad/factura') && preg_match('#^/contabilidad/factura/(?P<_format>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'dss_proyecto_contabilidad_factura')), array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\ContabilidadController::facturaAction',));
         }
 
         if (0 === strpos($pathinfo, '/gestion')) {
@@ -230,6 +222,24 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             // dss_proyecto_modificar_email
             if (0 === strpos($pathinfo, '/gestion/modificar_email') && preg_match('#^/gestion/modificar_email/(?P<tabla>[^/]++)/(?P<nif>[^/]++)$#s', $pathinfo, $matches)) {
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'dss_proyecto_modificar_email')), array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\GestionController::modificarEmailAction',));
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/contabilidad')) {
+            // dss_proyecto_contabilidad_pedido
+            if ($pathinfo === '/contabilidad/pedido') {
+                return array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\ContabilidadController::pedidoAction',  '_route' => 'dss_proyecto_contabilidad_pedido',);
+            }
+
+            // dss_proyecto_contabilidad_detalles
+            if (0 === strpos($pathinfo, '/contabilidad/detalles') && preg_match('#^/contabilidad/detalles/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'dss_proyecto_contabilidad_detalles')), array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\ContabilidadController::detallesAction',));
+            }
+
+            // dss_proyecto_contabilidad_crear
+            if ($pathinfo === '/contabilidad/crear') {
+                return array (  '_controller' => 'DSS\\ProyectoBundle\\Controller\\ContabilidadController::crearAction',  '_route' => 'dss_proyecto_contabilidad_crear',);
             }
 
         }
