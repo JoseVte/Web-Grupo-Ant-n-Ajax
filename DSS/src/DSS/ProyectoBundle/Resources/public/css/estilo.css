@@ -74,8 +74,13 @@ body {
     float: left;
 }
 
-form.pedido > div > label{
-    width: 300px;
+form.crearPedido > div > div > label{
+    width: 260px;
+    float: left;
+}
+
+form.crearPedido > div > div > label.elegir {
+    width: 200px;
     float: left;
 }
 

@@ -115,16 +115,16 @@ class ContabilidadController extends Controller {
             WHERE pe.proveedorNIF = p.NIF
             AND pe.clienteNIF = c.NIF
             ')->getResult();
-        
+
 
         return $this->render('DSSProyectoBundle:Contabilidad:pedido.html.twig', array(
                     'listado' => $pedidos
         ));
     }
 
-    function detallesAction($id){
+    function detallesAction($id) {
         $em = $this->getDoctrine()->getManager();
-        
+
         $servicios = $em->createQuery('SELECT s.nombre,s.descripcion,((s.precio*i.valor/100)+s.precio) precioIva
             FROM DSSProyectoBundle:LineaServicio ls,
             DSSProyectoBundle:Servicio s,
@@ -132,31 +132,87 @@ class ContabilidadController extends Controller {
             WHERE s.id=ls.servicioIdServicio AND
             ls.pedidoIdentificador = :id AND i.id=s.iva
             ')->setParameter('id', $id)->getResult();
-        
-        return $this->render('DSSProyectoBundle:Contabilidad:listar.html.twig', array('servicios' => $servicios));       
+
+        return $this->render('DSSProyectoBundle:Contabilidad:listar.html.twig', array('servicios' => $servicios));
     }
-    
-    function crearAction(){
-        
+
+    function crearAction() {
+        $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
 
-        $query_servicios = $em->createQuery('SELECT s,i.valor FROM DSSProyectoBundle:Servicio s 
+        $servicios = $em->createQuery('SELECT s,i.valor FROM DSSProyectoBundle:Servicio s 
                 JOIN DSSProyectoBundle:IVA i
-                WHERE i.id=s.iva');
-        $servicios = $query_servicios->getResult();
+                WHERE i.id=s.iva')->getResult();
+
+        $clientes = $em->getRepository('DSSProyectoBundle:Cliente')->findAll();
+        $clienteArray = array('empty_value' => 'Elige el cliente');
+
+        foreach ($clientes as $cliente) {
+            $clienteArray[$cliente->getNIF()] = $cliente->getNombre();
+        }
+
+        $proveedores = $em->getRepository('DSSProyectoBundle:Proveedor')->findAll();
+        $proveedorArray = array('empty_value' => 'Elige el proveedor');
+
+        foreach ($proveedores as $proveedor) {
+            $proveedorArray[$proveedor->getNIF()] = $proveedor->getNombre();
+        }
 
         $form = $this->createFormBuilder();
 
         foreach ($servicios as $servicio) {
             $total = $servicio[0]->getPrecio() + ($servicio["valor"] * $servicio[0]->getPrecio() / 100 );
 
-            $form->add('servicio' . $servicio[0]->getId(), 'checkbox', array(
+            $form->add($servicio[0]->getId(), 'checkbox', array(
                 'label' => $servicio[0] . ': ' . $total . '€',
                 'value' => $servicio[0]->getId(),
                 'required' => false
             ));
         }
+
+        $form->add('cliente', 'choice', array(
+            'choices' => $clienteArray,
+            'required' => true,
+            'label_attr' => array('class' => 'elegir')
+        ));
+
+        $form->add('proveedor', 'choice', array(
+            'choices' => $proveedorArray,
+            'required' => true,
+            'label_attr' => array('class' => 'elegir')
+        ));
         
-        return $this->render('DSSProyectoBundle:Contabilidad:crear.html.twig',array('form' => $form->getForm()->createView()));
+        $form_f = $form->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form_f->submit($request);
+            
+            //Guardar pedido
+            //Calcular numero del pedido
+            $conn= $this->getDoctrine()->getConnection();
+            $stm=$conn->prepare('INSERT INTO Pedido (Proveedor_NIF,Cliente_NIF) values (:p,:c)');
+            $stm->bindValue('p',$form_f->getData()['proveedor']);
+            $stm->bindValue('c',$form_f->getData()['cliente']);
+            $stm->execute();
+            
+            $num_ped = $conn->lastInsertId();
+            
+            foreach (array_keys($form_f->getData()) as $key) {
+                if(is_int($key)){
+                    if($form_f->getData()[$key]){
+                        $stm_t=$conn->prepare('INSERT INTO LineaServicio (Servicio_idServicio,Pedido_Identificador) values (:s,:p)');
+                        $stm_t->bindValue('s',$key);
+                        $stm_t->bindValue('p',$num_ped);
+                        
+                        $stm_t->execute();
+                    }
+                }
+            }
+
+            return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje' => 'Se ha creado correctamente'));
+        }
+
+        return $this->render('DSSProyectoBundle:Contabilidad:crear.html.twig', array('form' => $form_f->createView()));
     }
+
 }

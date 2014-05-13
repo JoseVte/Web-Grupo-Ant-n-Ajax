@@ -49,7 +49,7 @@ $this->container = $container;
 protected function getSession()
 {
 if (!$this->container->has('session')) {
-return null;
+return;
 }
 return $this->container->get('session');
 }
@@ -415,17 +415,17 @@ public function close()
 $this->active = false;
 return (bool) $this->handler->close();
 }
-public function read($id)
+public function read($sessionId)
 {
-return (string) $this->handler->read($id);
+return (string) $this->handler->read($sessionId);
 }
-public function write($id, $data)
+public function write($sessionId, $data)
 {
-return (bool) $this->handler->write($id, $data);
+return (bool) $this->handler->write($sessionId, $data);
 }
-public function destroy($id)
+public function destroy($sessionId)
 {
-return (bool) $this->handler->destroy($id);
+return (bool) $this->handler->destroy($sessionId);
 }
 public function gc($maxlifetime)
 {
@@ -625,7 +625,7 @@ return $this->container->getParameter('kernel.environment');
 }
 public function getDebug()
 {
-return (Boolean) $this->container->getParameter('kernel.debug');
+return (bool) $this->container->getParameter('kernel.debug');
 }
 }
 }
@@ -859,7 +859,7 @@ return $this->context;
 }
 public function setStrictRequirements($enabled)
 {
-$this->strictRequirements = null === $enabled ? null : (Boolean) $enabled;
+$this->strictRequirements = null === $enabled ? null : (bool) $enabled;
 }
 public function isStrictRequirements()
 {
@@ -893,7 +893,7 @@ throw new InvalidParameterException($message);
 if ($this->logger) {
 $this->logger->error($message);
 }
-return null;
+return;
 }
 $url = $token[1].$mergedParams[$token[3]].$url;
 $optional = false;
@@ -932,7 +932,7 @@ throw new InvalidParameterException($message);
 if ($this->logger) {
 $this->logger->error($message);
 }
-return null;
+return;
 }
 $routeHost = $token[1].$mergedParams[$token[3]].$routeHost;
 } else {
@@ -1684,7 +1684,7 @@ return $this->sorted;
 }
 public function hasListeners($eventName = null)
 {
-return (Boolean) count($this->getListeners($eventName));
+return (bool) count($this->getListeners($eventName));
 }
 public function addListener($eventName, $listener, $priority = 0)
 {
@@ -1793,7 +1793,7 @@ parent::removeListener($eventName, $listener);
 public function hasListeners($eventName = null)
 {
 if (null === $eventName) {
-return (Boolean) count($this->listenerIds) || (Boolean) count($this->listeners);
+return (bool) count($this->listenerIds) || (bool) count($this->listeners);
 }
 if (isset($this->listenerIds[$eventName])) {
 return true;
@@ -2563,7 +2563,7 @@ if (!$providers) {
 throw new \InvalidArgumentException('You must at least add one authentication provider.');
 }
 $this->providers = $providers;
-$this->eraseCredentials = (Boolean) $eraseCredentials;
+$this->eraseCredentials = (bool) $eraseCredentials;
 }
 public function setEventDispatcher(EventDispatcherInterface $dispatcher)
 {
@@ -2640,8 +2640,8 @@ throw new \InvalidArgumentException(sprintf('The strategy "%s" is not supported.
 }
 $this->voters = $voters;
 $this->strategy = $strategyMethod;
-$this->allowIfAllAbstainDecisions = (Boolean) $allowIfAllAbstainDecisions;
-$this->allowIfEqualGrantedDeniedDecisions = (Boolean) $allowIfEqualGrantedDeniedDecisions;
+$this->allowIfAllAbstainDecisions = (bool) $allowIfAllAbstainDecisions;
+$this->allowIfEqualGrantedDeniedDecisions = (bool) $allowIfEqualGrantedDeniedDecisions;
 }
 public function decide(TokenInterface $token, array $attributes, $object = null)
 {

@@ -47,6 +47,7 @@ class appDevDebugProjectContainer extends Container
             'controller_name_converter' => 'getControllerNameConverterService',
             'data_collector.form' => 'getDataCollector_FormService',
             'data_collector.form.extractor' => 'getDataCollector_Form_ExtractorService',
+            'data_collector.ladybug_data_collector' => 'getDataCollector_LadybugDataCollectorService',
             'data_collector.request' => 'getDataCollector_RequestService',
             'data_collector.router' => 'getDataCollector_RouterService',
             'debug.controller_resolver' => 'getDebug_ControllerResolverService',
@@ -115,6 +116,8 @@ class appDevDebugProjectContainer extends Container
             'fragment.renderer.inline' => 'getFragment_Renderer_InlineService',
             'http_kernel' => 'getHttpKernelService',
             'kernel' => 'getKernelService',
+            'ladybug.dumper' => 'getLadybug_DumperService',
+            'ladybug.event_listener.ladybug_config_listener' => 'getLadybug_EventListener_LadybugConfigListenerService',
             'locale_listener' => 'getLocaleListenerService',
             'logger' => 'getLoggerService',
             'monolog.handler.console' => 'getMonolog_Handler_ConsoleService',
@@ -248,6 +251,7 @@ class appDevDebugProjectContainer extends Container
             'debug.templating.engine.twig' => 'templating',
             'doctrine.orm.entity_manager' => 'doctrine.orm.default_entity_manager',
             'event_dispatcher' => 'debug.event_dispatcher',
+            'ladybug' => 'data_collector.ladybug_data_collector',
             'mailer' => 'swiftmailer.mailer.default',
             'sensio.distribution.webconfigurator' => 'sensio_distribution.webconfigurator',
             'session.storage' => 'session.storage.native',
@@ -415,6 +419,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'data_collector.ladybug_data_collector' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return RaulFraile\Bundle\LadybugBundle\DataCollector\LadybugDataCollector A RaulFraile\Bundle\LadybugBundle\DataCollector\LadybugDataCollector instance.
+     */
+    protected function getDataCollector_LadybugDataCollectorService()
+    {
+        return $this->services['data_collector.ladybug_data_collector'] = new \RaulFraile\Bundle\LadybugBundle\DataCollector\LadybugDataCollector($this);
+    }
+
+    /**
      * Gets the 'data_collector.request' service.
      *
      * This service is shared.
@@ -496,6 +513,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addListenerService('kernel.controller', array(0 => 'ps_pdf.listener', 1 => 'onKernelController'), 1000);
         $instance->addListenerService('kernel.response', array(0 => 'ps_pdf.listener', 1 => 'onKernelResponse'), 1000);
         $instance->addListenerService('kernel.request', array(0 => 'ps_pdf.listener', 1 => 'onKernelRequest'), 0);
+        $instance->addListenerService('kernel.request', array(0 => 'ladybug.event_listener.ladybug_config_listener', 1 => 'onKernelRequest'), 0);
         $instance->addListenerService('kernel.controller', array(0 => 'acme.demo.listener', 1 => 'onKernelController'), 0);
         $instance->addSubscriberService('response_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener');
         $instance->addSubscriberService('streamed_response_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\StreamedResponseListener');
@@ -547,6 +565,7 @@ class appDevDebugProjectContainer extends Container
     {
         $this->services['debug.templating.engine.php'] = $instance = new \Symfony\Bundle\FrameworkBundle\Templating\TimedPhpEngine($this->get('templating.name_parser'), $this, $this->get('templating.loader'), $this->get('debug.stopwatch'), $this->get('templating.globals'));
 
+        $instance->setCharset('UTF-8');
         $instance->setHelpers(array('slots' => 'templating.helper.slots', 'assets' => 'templating.helper.assets', 'request' => 'templating.helper.request', 'session' => 'templating.helper.session', 'router' => 'templating.helper.router', 'actions' => 'templating.helper.actions', 'code' => 'templating.helper.code', 'translator' => 'templating.helper.translator', 'form' => 'templating.helper.form', 'stopwatch' => 'templating.helper.stopwatch', 'logout_url' => 'templating.helper.logout_url', 'security' => 'templating.helper.security', 'assetic' => 'assetic.helper.dynamic'));
 
         return $instance;
@@ -1374,6 +1393,36 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'ladybug.dumper' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Ladybug\Dumper A Ladybug\Dumper instance.
+     */
+    protected function getLadybug_DumperService()
+    {
+        $this->services['ladybug.dumper'] = $instance = new \Ladybug\Dumper();
+
+        $instance->setOptions(array('extra_helpers' => array(0 => 'RaulFraile\\Bundle\\LadybugBundle\\DataCollector\\LadybugDataCollector:log'), 'theme' => 'modern', 'expanded' => false, 'silenced' => false, 'array_max_nesting_level' => 9, 'object_max_nesting_level' => 3));
+
+        return $instance;
+    }
+
+    /**
+     * Gets the 'ladybug.event_listener.ladybug_config_listener' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return RaulFraile\Bundle\LadybugBundle\EventListener\LadybugConfigListener A RaulFraile\Bundle\LadybugBundle\EventListener\LadybugConfigListener instance.
+     */
+    protected function getLadybug_EventListener_LadybugConfigListenerService()
+    {
+        return $this->services['ladybug.event_listener.ladybug_config_listener'] = new \RaulFraile\Bundle\LadybugBundle\EventListener\LadybugConfigListener(array('extra_helpers' => array(0 => 'RaulFraile\\Bundle\\LadybugBundle\\DataCollector\\LadybugDataCollector:log'), 'theme' => 'modern', 'expanded' => false, 'silenced' => false, 'array_max_nesting_level' => 9, 'object_max_nesting_level' => 3));
+    }
+
+    /**
      * Gets the 'locale_listener' service.
      *
      * This service is shared.
@@ -1650,6 +1699,7 @@ class appDevDebugProjectContainer extends Container
         $instance->add(new \Symfony\Bundle\SecurityBundle\DataCollector\SecurityDataCollector($this->get('security.context', ContainerInterface::NULL_ON_INVALID_REFERENCE)));
         $instance->add(new \Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector($this));
         $instance->add($d);
+        $instance->add($this->get('data_collector.ladybug_data_collector'));
 
         return $instance;
     }
@@ -1932,7 +1982,7 @@ class appDevDebugProjectContainer extends Container
         $o = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($m, array('login_path' => 'dss_proyecto_login', 'always_use_default_target_path' => false, 'default_target_path' => '/', 'target_path_parameter' => '_target_path', 'use_referer' => false));
         $o->setProviderKey('admin_area');
 
-        return $this->services['security.firewall.map.context.admin_area'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($l, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('security.user.provider.concrete.usuario')), 'admin_area', $a, $c), 2 => $n, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('migrate'), $m, 'admin_area', $o, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($e, $m, array('login_path' => 'dss_proyecto_login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $a), array('check_path' => 'dss_proyecto_login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $c, NULL), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '536b952c71084', $a), 5 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $l, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $m, 'admin_area', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $m, 'dss_proyecto_login', false), NULL, NULL, $a));
+        return $this->services['security.firewall.map.context.admin_area'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($l, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('security.user.provider.concrete.usuario')), 'admin_area', $a, $c), 2 => $n, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('migrate'), $m, 'admin_area', $o, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($e, $m, array('login_path' => 'dss_proyecto_login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $a), array('check_path' => 'dss_proyecto_login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $c, NULL), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '5371025120f40', $a), 5 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $l, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $m, 'admin_area', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $m, 'dss_proyecto_login', false), NULL, NULL, $a));
     }
 
     /**
@@ -2305,7 +2355,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTemplatingService()
     {
-        $this->services['templating'] = $instance = new \Symfony\Bundle\TwigBundle\Debug\TimedTwigEngine($this->get('twig'), $this->get('templating.name_parser'), $this->get('templating.locator'), $this->get('debug.stopwatch'), $this->get('templating.globals'));
+        $this->services['templating'] = $instance = new \Symfony\Bundle\TwigBundle\Debug\TimedTwigEngine($this->get('twig'), $this->get('templating.name_parser'), $this->get('templating.locator'), $this->get('debug.stopwatch'));
 
         $instance->setDefaultEscapingStrategy(array(0 => $instance, 1 => 'guessDefaultEscapingStrategy'));
 
@@ -2957,6 +3007,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addExtension(new \Symfony\Bundle\AsseticBundle\Twig\AsseticExtension($this->get('assetic.asset_factory'), $this->get('templating.name_parser'), true, array(), array(), $this->get('assetic.value_supplier.default', ContainerInterface::NULL_ON_INVALID_REFERENCE)));
         $instance->addExtension(new \Doctrine\Bundle\DoctrineBundle\Twig\DoctrineExtension());
         $instance->addExtension(new \Ps\PdfBundle\Twig\Extensions\Extension\PdfExtension(new \Ps\PdfBundle\Templating\ImageLocator($this->get('kernel'))));
+        $instance->addExtension(new \RaulFraile\Bundle\LadybugBundle\Twig\Extension\LadybugExtension($this));
         $instance->addExtension($this->get('twig.extension.acme.demo'));
         $instance->addGlobal('app', $this->get('templating.globals'));
         $instance->addGlobal('ajax_aplicacion', array('class' => 'ajax_36ap2458e', 'div' => 'aplicacion'));
@@ -3010,6 +3061,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/vendor/doctrine/doctrine-bundle/Doctrine/Bundle/DoctrineBundle/Resources/views', 'Doctrine');
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/src/DSS/ProyectoBundle/Resources/views', 'DSSProyecto');
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/vendor/psliwa/pdf-bundle/Ps/PdfBundle/Resources/views', 'PsPdf');
+        $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/vendor/raulfraile/ladybug-bundle/RaulFraile/Bundle/LadybugBundle/Resources/views', 'RaulFraileLadybug');
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/src/Acme/DemoBundle/Resources/views', 'AcmeDemo');
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views', 'WebProfiler');
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/vendor/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle/Resources/views', 'SensioDistribution');
@@ -3094,7 +3146,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getWebProfiler_Controller_ProfilerService()
     {
-        return $this->services['web_profiler.controller.profiler'] = new \Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController($this->get('router', ContainerInterface::NULL_ON_INVALID_REFERENCE), $this->get('profiler', ContainerInterface::NULL_ON_INVALID_REFERENCE), $this->get('twig'), array('data_collector.config' => array(0 => 'config', 1 => '@WebProfiler/Collector/config.html.twig'), 'data_collector.request' => array(0 => 'request', 1 => '@WebProfiler/Collector/request.html.twig'), 'data_collector.exception' => array(0 => 'exception', 1 => '@WebProfiler/Collector/exception.html.twig'), 'data_collector.events' => array(0 => 'events', 1 => '@WebProfiler/Collector/events.html.twig'), 'data_collector.logger' => array(0 => 'logger', 1 => '@WebProfiler/Collector/logger.html.twig'), 'data_collector.time' => array(0 => 'time', 1 => '@WebProfiler/Collector/time.html.twig'), 'data_collector.memory' => array(0 => 'memory', 1 => '@WebProfiler/Collector/memory.html.twig'), 'data_collector.router' => array(0 => 'router', 1 => '@WebProfiler/Collector/router.html.twig'), 'data_collector.form' => array(0 => 'form', 1 => '@WebProfiler/Collector/form.html.twig'), 'data_collector.security' => array(0 => 'security', 1 => '@Security/Collector/security.html.twig'), 'swiftmailer.data_collector' => array(0 => 'swiftmailer', 1 => '@Swiftmailer/Collector/swiftmailer.html.twig'), 'data_collector.doctrine' => array(0 => 'db', 1 => 'DoctrineBundle:Collector:db')), 'bottom');
+        return $this->services['web_profiler.controller.profiler'] = new \Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController($this->get('router', ContainerInterface::NULL_ON_INVALID_REFERENCE), $this->get('profiler', ContainerInterface::NULL_ON_INVALID_REFERENCE), $this->get('twig'), array('data_collector.config' => array(0 => 'config', 1 => '@WebProfiler/Collector/config.html.twig'), 'data_collector.request' => array(0 => 'request', 1 => '@WebProfiler/Collector/request.html.twig'), 'data_collector.exception' => array(0 => 'exception', 1 => '@WebProfiler/Collector/exception.html.twig'), 'data_collector.events' => array(0 => 'events', 1 => '@WebProfiler/Collector/events.html.twig'), 'data_collector.logger' => array(0 => 'logger', 1 => '@WebProfiler/Collector/logger.html.twig'), 'data_collector.time' => array(0 => 'time', 1 => '@WebProfiler/Collector/time.html.twig'), 'data_collector.memory' => array(0 => 'memory', 1 => '@WebProfiler/Collector/memory.html.twig'), 'data_collector.router' => array(0 => 'router', 1 => '@WebProfiler/Collector/router.html.twig'), 'data_collector.form' => array(0 => 'form', 1 => '@WebProfiler/Collector/form.html.twig'), 'data_collector.security' => array(0 => 'security', 1 => '@Security/Collector/security.html.twig'), 'swiftmailer.data_collector' => array(0 => 'swiftmailer', 1 => '@Swiftmailer/Collector/swiftmailer.html.twig'), 'data_collector.doctrine' => array(0 => 'db', 1 => 'DoctrineBundle:Collector:db'), 'data_collector.ladybug_data_collector' => array(0 => 'ladybug', 1 => 'RaulFraileLadybugBundle:Collector:ladybug')), 'bottom');
     }
 
     /**
@@ -3263,7 +3315,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_Authentication_ManagerService()
     {
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.usuario'), new \Symfony\Component\Security\Core\User\UserChecker(), 'admin_area', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('536b952c71084')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.usuario'), new \Symfony\Component\Security\Core\User\UserChecker(), 'admin_area', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('5371025120f40')), true);
 
         $instance->setEventDispatcher($this->get('debug.event_dispatcher'));
 
@@ -3456,7 +3508,7 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getParameterBag()
     {
@@ -3491,6 +3543,7 @@ class appDevDebugProjectContainer extends Container
                 'SensioFrameworkExtraBundle' => 'Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle',
                 'DSSProyectoBundle' => 'DSS\\ProyectoBundle\\DSSProyectoBundle',
                 'PsPdfBundle' => 'Ps\\PdfBundle\\PsPdfBundle',
+                'RaulFraileLadybugBundle' => 'RaulFraile\\Bundle\\LadybugBundle\\RaulFraileLadybugBundle',
                 'AcmeDemoBundle' => 'Acme\\DemoBundle\\AcmeDemoBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
@@ -4020,6 +4073,16 @@ class appDevDebugProjectContainer extends Container
             'ps_pdf.markdown_document_template_filepath' => NULL,
             'ps_pdf.document_parser_type' => 'xml',
             'ps_pdf.string_filter.bundle_based.class' => 'Ps\\PdfBundle\\PHPPdf\\Util\\BundleBasedStringFilter',
+            'ladybug.options' => array(
+                'extra_helpers' => array(
+                    0 => 'RaulFraile\\Bundle\\LadybugBundle\\DataCollector\\LadybugDataCollector:log',
+                ),
+                'theme' => 'modern',
+                'expanded' => false,
+                'silenced' => false,
+                'array_max_nesting_level' => 9,
+                'object_max_nesting_level' => 3,
+            ),
             'web_profiler.controller.profiler.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController',
             'web_profiler.controller.router.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\RouterController',
             'web_profiler.controller.exception.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ExceptionController',
@@ -4076,6 +4139,10 @@ class appDevDebugProjectContainer extends Container
                 'data_collector.doctrine' => array(
                     0 => 'db',
                     1 => 'DoctrineBundle:Collector:db',
+                ),
+                'data_collector.ladybug_data_collector' => array(
+                    0 => 'ladybug',
+                    1 => 'RaulFraileLadybugBundle:Collector:ladybug',
                 ),
             ),
             'console.command.ids' => array(

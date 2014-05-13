@@ -28,7 +28,7 @@ class __TwigTemplate_9de3a5ca1486f9cd477ad2980ef55f3d2052335379c642b2403ff5152b3
         // line 4
         echo "    <form id=\"";
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["ajax_div_flotante"]) ? $context["ajax_div_flotante"] : $this->getContext($context, "ajax_div_flotante")), "form"), "html", null, true);
-        echo "\" method=\"POST\" action=\"";
+        echo "\" class=\"crearPedido\" method=\"POST\" action=\"";
         echo $this->env->getExtension('routing')->getPath("dss_proyecto_contabilidad_crear");
         echo "\">
     ";

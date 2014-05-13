@@ -1,7 +1,7 @@
 {% extends app.request.isXmlHttpRequest ? "DSSProyectoBundle::layout_ajax.html.twig": "DSSProyectoBundle::plantilla.html.twig" %}
 
 {% block content %}
-    <form id="{{ajax_div_flotante.form}}" method="POST" action="{{path('dss_proyecto_contabilidad_crear')}}">
+    <form id="{{ajax_div_flotante.form}}" class="crearPedido" method="POST" action="{{path('dss_proyecto_contabilidad_crear')}}">
     {{ form_widget(form) }}
     {% if ajax == true %}
              <a style="cursor:pointer" class="closeVentanaDeslizante">Salir</a>

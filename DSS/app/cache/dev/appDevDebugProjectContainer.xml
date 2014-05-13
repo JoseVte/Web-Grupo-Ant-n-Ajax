@@ -18,6 +18,7 @@
       <parameter key="SensioFrameworkExtraBundle">Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle</parameter>
       <parameter key="DSSProyectoBundle">DSS\ProyectoBundle\DSSProyectoBundle</parameter>
       <parameter key="PsPdfBundle">Ps\PdfBundle\PsPdfBundle</parameter>
+      <parameter key="RaulFraileLadybugBundle">RaulFraile\Bundle\LadybugBundle\RaulFraileLadybugBundle</parameter>
       <parameter key="AcmeDemoBundle">Acme\DemoBundle\AcmeDemoBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -523,6 +524,16 @@
     <parameter key="ps_pdf.markdown_document_template_filepath">null</parameter>
     <parameter key="ps_pdf.document_parser_type">xml</parameter>
     <parameter key="ps_pdf.string_filter.bundle_based.class">Ps\PdfBundle\PHPPdf\Util\BundleBasedStringFilter</parameter>
+    <parameter key="ladybug.options" type="collection">
+      <parameter key="extra_helpers" type="collection">
+        <parameter>RaulFraile\Bundle\LadybugBundle\DataCollector\LadybugDataCollector:log</parameter>
+      </parameter>
+      <parameter key="theme">modern</parameter>
+      <parameter key="expanded">false</parameter>
+      <parameter key="silenced">false</parameter>
+      <parameter key="array_max_nesting_level">9</parameter>
+      <parameter key="object_max_nesting_level">3</parameter>
+    </parameter>
     <parameter key="web_profiler.controller.profiler.class">Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController</parameter>
     <parameter key="web_profiler.controller.router.class">Symfony\Bundle\WebProfilerBundle\Controller\RouterController</parameter>
     <parameter key="web_profiler.controller.exception.class">Symfony\Bundle\WebProfilerBundle\Controller\ExceptionController</parameter>
@@ -579,6 +590,10 @@
       <parameter key="data_collector.doctrine" type="collection">
         <parameter>db</parameter>
         <parameter>DoctrineBundle:Collector:db</parameter>
+      </parameter>
+      <parameter key="data_collector.ladybug_data_collector" type="collection">
+        <parameter>ladybug</parameter>
+        <parameter>RaulFraileLadybugBundle:Collector:ladybug</parameter>
       </parameter>
     </parameter>
     <parameter key="console.command.ids" type="collection"/>
@@ -978,6 +993,14 @@
         <argument>kernel.request</argument>
         <argument type="collection">
           <argument>ps_pdf.listener</argument>
+          <argument>onKernelRequest</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListenerService">
+        <argument>kernel.request</argument>
+        <argument type="collection">
+          <argument>ladybug.event_listener.ladybug_config_listener</argument>
           <argument>onKernelRequest</argument>
         </argument>
         <argument>0</argument>
@@ -1557,6 +1580,9 @@
           </service>
         </argument>
       </call>
+      <call method="add">
+        <argument type="service" id="data_collector.ladybug_data_collector"/>
+      </call>
     </service>
     <service id="profiler_listener" class="Symfony\Component\HttpKernel\EventListener\ProfilerListener">
       <tag name="kernel.event_subscriber"/>
@@ -1692,7 +1718,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>536b952c71084</argument>
+            <argument>5371025120f40</argument>
           </service>
         </argument>
       </argument>
@@ -1972,7 +1998,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.context"/>
-            <argument>536b952c71084</argument>
+            <argument>5371025120f40</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
           </service>
         </argument>
@@ -2230,6 +2256,14 @@
                 <argument type="service" id="kernel"/>
               </service>
             </argument>
+          </service>
+        </argument>
+      </call>
+      <call method="addExtension">
+        <argument type="service">
+          <service class="RaulFraile\Bundle\LadybugBundle\Twig\Extension\LadybugExtension" public="false">
+            <tag name="twig.extension"/>
+            <argument type="service" id="service_container"/>
           </service>
         </argument>
       </call>
@@ -2624,6 +2658,37 @@
         <argument key="cache_dir">/opt/lampp/htdocs/dss_p2g05/DSS/app/cache/dev</argument>
       </argument>
     </service>
+    <service id="ladybug.dumper" class="Ladybug\Dumper">
+      <call method="setOptions">
+        <argument type="collection">
+          <argument key="extra_helpers" type="collection">
+            <argument>RaulFraile\Bundle\LadybugBundle\DataCollector\LadybugDataCollector:log</argument>
+          </argument>
+          <argument key="theme">modern</argument>
+          <argument key="expanded">false</argument>
+          <argument key="silenced">false</argument>
+          <argument key="array_max_nesting_level">9</argument>
+          <argument key="object_max_nesting_level">3</argument>
+        </argument>
+      </call>
+    </service>
+    <service id="data_collector.ladybug_data_collector" class="RaulFraile\Bundle\LadybugBundle\DataCollector\LadybugDataCollector">
+      <tag name="data_collector" template="RaulFraileLadybugBundle:Collector:ladybug" id="ladybug"/>
+      <argument type="service" id="service_container"/>
+    </service>
+    <service id="ladybug.event_listener.ladybug_config_listener" class="RaulFraile\Bundle\LadybugBundle\EventListener\LadybugConfigListener">
+      <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
+      <argument type="collection">
+        <argument key="extra_helpers" type="collection">
+          <argument>RaulFraile\Bundle\LadybugBundle\DataCollector\LadybugDataCollector:log</argument>
+        </argument>
+        <argument key="theme">modern</argument>
+        <argument key="expanded">false</argument>
+        <argument key="silenced">false</argument>
+        <argument key="array_max_nesting_level">9</argument>
+        <argument key="object_max_nesting_level">3</argument>
+      </argument>
+    </service>
     <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
       <tag name="twig.extension"/>
       <argument type="service" id="twig.loader"/>
@@ -2684,6 +2749,10 @@
         <argument key="data_collector.doctrine" type="collection">
           <argument>db</argument>
           <argument>DoctrineBundle:Collector:db</argument>
+        </argument>
+        <argument key="data_collector.ladybug_data_collector" type="collection">
+          <argument>ladybug</argument>
+          <argument>RaulFraileLadybugBundle:Collector:ladybug</argument>
         </argument>
       </argument>
       <argument>bottom</argument>
@@ -2835,6 +2904,9 @@
       <argument type="service" id="templating.loader"/>
       <argument type="service" id="debug.stopwatch"/>
       <argument type="service" id="templating.globals"/>
+      <call method="setCharset">
+        <argument>UTF-8</argument>
+      </call>
       <call method="setHelpers">
         <argument type="collection">
           <argument key="slots">templating.helper.slots</argument>
@@ -2858,7 +2930,6 @@
       <argument type="service" id="templating.name_parser"/>
       <argument type="service" id="templating.locator"/>
       <argument type="service" id="debug.stopwatch"/>
-      <argument type="service" id="templating.globals"/>
       <call method="setDefaultEscapingStrategy">
         <argument type="collection">
           <argument type="service" id="templating"/>
@@ -2936,6 +3007,10 @@
       <call method="addPath">
         <argument>/opt/lampp/htdocs/dss_p2g05/DSS/vendor/psliwa/pdf-bundle/Ps/PdfBundle/Resources/views</argument>
         <argument>PsPdf</argument>
+      </call>
+      <call method="addPath">
+        <argument>/opt/lampp/htdocs/dss_p2g05/DSS/vendor/raulfraile/ladybug-bundle/RaulFraile/Bundle/LadybugBundle/Resources/views</argument>
+        <argument>RaulFraileLadybug</argument>
       </call>
       <call method="addPath">
         <argument>/opt/lampp/htdocs/dss_p2g05/DSS/src/Acme/DemoBundle/Resources/views</argument>
@@ -3038,6 +3113,7 @@
     <service id="mailer" alias="swiftmailer.mailer.default"/>
     <service id="database_connection" alias="doctrine.dbal.default_connection"/>
     <service id="doctrine.orm.entity_manager" alias="doctrine.orm.default_entity_manager"/>
+    <service id="ladybug" alias="data_collector.ladybug_data_collector"/>
     <service id="sensio.distribution.webconfigurator" alias="sensio_distribution.webconfigurator"/>
   </services>
 </container>
