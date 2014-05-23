@@ -1,5 +1,0 @@
-_assetic:
-    resource: .
-    type: assetic
-_app:
-    resource: /opt/lampp/htdocs/dss_p2g05/DSS/app/config/routing_dev.yml

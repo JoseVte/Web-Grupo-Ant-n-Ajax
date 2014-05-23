@@ -64,10 +64,10 @@ class Servicio extends \DSS\ProyectoBundle\Entity\Servicio implements \Doctrine\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'id', 'nombre', 'descripcion', 'precio');
+            return array('__isInitialized__', 'id', 'nombre', 'descripcion', 'precio', 'iva');
         }
 
-        return array('__isInitialized__', 'id', 'nombre', 'descripcion', 'precio');
+        return array('__isInitialized__', 'id', 'nombre', 'descripcion', 'precio', 'iva');
     }
 
     /**
@@ -252,6 +252,39 @@ class Servicio extends \DSS\ProyectoBundle\Entity\Servicio implements \Doctrine\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPrecio', array());
 
         return parent::getPrecio();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIva()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIva', array());
+
+        return parent::getIva();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIva($iva)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIva', array($iva));
+
+        return parent::setIva($iva);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', array());
+
+        return parent::__toString();
     }
 
 }

@@ -26,6 +26,7 @@ class appProdProjectContainer extends Container
             'cache_clearer' => 'getCacheClearerService',
             'cache_warmer' => 'getCacheWarmerService',
             'controller_name_converter' => 'getControllerNameConverterService',
+            'data_collector.ladybug_data_collector' => 'getDataCollector_LadybugDataCollectorService',
             'debug.emergency_logger_listener' => 'getDebug_EmergencyLoggerListenerService',
             'doctrine' => 'getDoctrineService',
             'doctrine.dbal.connection_factory' => 'getDoctrine_Dbal_ConnectionFactoryService',
@@ -86,6 +87,8 @@ class appProdProjectContainer extends Container
             'fragment.renderer.inline' => 'getFragment_Renderer_InlineService',
             'http_kernel' => 'getHttpKernelService',
             'kernel' => 'getKernelService',
+            'ladybug.dumper' => 'getLadybug_DumperService',
+            'ladybug.event_listener.ladybug_config_listener' => 'getLadybug_EventListener_LadybugConfigListenerService',
             'locale_listener' => 'getLocaleListenerService',
             'logger' => 'getLoggerService',
             'monolog.handler.console' => 'getMonolog_Handler_ConsoleService',
@@ -204,6 +207,7 @@ class appProdProjectContainer extends Container
         $this->aliases = array(
             'database_connection' => 'doctrine.dbal.default_connection',
             'doctrine.orm.entity_manager' => 'doctrine.orm.default_entity_manager',
+            'ladybug' => 'data_collector.ladybug_data_collector',
             'mailer' => 'swiftmailer.mailer.default',
             'session.storage' => 'session.storage.native',
             'swiftmailer.mailer' => 'swiftmailer.mailer.default',
@@ -240,6 +244,10 @@ class appProdProjectContainer extends Container
         $b = $this->get('templating.filename_parser');
         $c = new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinder($a, $b, '/opt/lampp/htdocs/dss_p2g05/DSS/app/Resources');
         return $this->services['cache_warmer'] = new \Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate(array(0 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplatePathsCacheWarmer($c, $this->get('templating.locator')), 1 => new \Symfony\Bundle\AsseticBundle\CacheWarmer\AssetManagerCacheWarmer($this), 2 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\RouterCacheWarmer($this->get('router')), 3 => new \Symfony\Bundle\TwigBundle\CacheWarmer\TemplateCacheCacheWarmer($this, $c), 4 => new \Symfony\Bridge\Doctrine\CacheWarmer\ProxyCacheWarmer($this->get('doctrine'))));
+    }
+    protected function getDataCollector_LadybugDataCollectorService()
+    {
+        return $this->services['data_collector.ladybug_data_collector'] = new \RaulFraile\Bundle\LadybugBundle\DataCollector\LadybugDataCollector($this);
     }
     protected function getDebug_EmergencyLoggerListenerService()
     {
@@ -301,6 +309,7 @@ class appProdProjectContainer extends Container
         $instance->addListenerService('kernel.controller', array(0 => 'ps_pdf.listener', 1 => 'onKernelController'), 1000);
         $instance->addListenerService('kernel.response', array(0 => 'ps_pdf.listener', 1 => 'onKernelResponse'), 1000);
         $instance->addListenerService('kernel.request', array(0 => 'ps_pdf.listener', 1 => 'onKernelRequest'), 0);
+        $instance->addListenerService('kernel.request', array(0 => 'ladybug.event_listener.ladybug_config_listener', 1 => 'onKernelRequest'), 0);
         $instance->addSubscriberService('response_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener');
         $instance->addSubscriberService('streamed_response_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\StreamedResponseListener');
         $instance->addSubscriberService('locale_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\LocaleListener');
@@ -534,6 +543,16 @@ class appProdProjectContainer extends Container
     {
         throw new RuntimeException('You have requested a synthetic service ("kernel"). The DIC does not know how to construct this service.');
     }
+    protected function getLadybug_DumperService()
+    {
+        $this->services['ladybug.dumper'] = $instance = new \Ladybug\Dumper();
+        $instance->setOptions(array('extra_helpers' => array(0 => 'RaulFraile\\Bundle\\LadybugBundle\\DataCollector\\LadybugDataCollector:log'), 'theme' => 'modern', 'expanded' => false, 'silenced' => false, 'array_max_nesting_level' => 9, 'object_max_nesting_level' => 3));
+        return $instance;
+    }
+    protected function getLadybug_EventListener_LadybugConfigListenerService()
+    {
+        return $this->services['ladybug.event_listener.ladybug_config_listener'] = new \RaulFraile\Bundle\LadybugBundle\EventListener\LadybugConfigListener(array('extra_helpers' => array(0 => 'RaulFraile\\Bundle\\LadybugBundle\\DataCollector\\LadybugDataCollector:log'), 'theme' => 'modern', 'expanded' => false, 'silenced' => false, 'array_max_nesting_level' => 9, 'object_max_nesting_level' => 3));
+    }
     protected function getLocaleListenerService()
     {
         return $this->services['locale_listener'] = new \Symfony\Component\HttpKernel\EventListener\LocaleListener('en', $this->get('router', ContainerInterface::NULL_ON_INVALID_REFERENCE), $this->get('request_stack'));
@@ -696,7 +715,7 @@ class appProdProjectContainer extends Container
         $n->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
         $o = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($m, array('login_path' => 'dss_proyecto_login', 'always_use_default_target_path' => false, 'default_target_path' => '/', 'target_path_parameter' => '_target_path', 'use_referer' => false));
         $o->setProviderKey('admin_area');
-        return $this->services['security.firewall.map.context.admin_area'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($l, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('security.user.provider.concrete.usuario')), 'admin_area', $a, $c), 2 => $n, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('migrate'), $m, 'admin_area', $o, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($e, $m, array('login_path' => 'dss_proyecto_login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $a), array('check_path' => 'dss_proyecto_login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $c, NULL), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '5368981c8b28e', $a), 5 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $l, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $m, 'admin_area', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $m, 'dss_proyecto_login', false), NULL, NULL, $a));
+        return $this->services['security.firewall.map.context.admin_area'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($l, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('security.user.provider.concrete.usuario')), 'admin_area', $a, $c), 2 => $n, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, new \Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy('migrate'), $m, 'admin_area', $o, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($e, $m, array('login_path' => 'dss_proyecto_login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $a), array('check_path' => 'dss_proyecto_login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $c, NULL), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '537b6879148bd', $a), 5 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $l, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $m, 'admin_area', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $m, 'dss_proyecto_login', false), NULL, NULL, $a));
     }
     protected function getSecurity_Rememberme_ResponseListenerService()
     {
@@ -1043,6 +1062,7 @@ class appProdProjectContainer extends Container
         $instance->addExtension(new \Symfony\Bundle\AsseticBundle\Twig\AsseticExtension($this->get('assetic.asset_factory'), $this->get('templating.name_parser'), false, array(), array(), new \Symfony\Bundle\AsseticBundle\DefaultValueSupplier($this)));
         $instance->addExtension(new \Doctrine\Bundle\DoctrineBundle\Twig\DoctrineExtension());
         $instance->addExtension(new \Ps\PdfBundle\Twig\Extensions\Extension\PdfExtension(new \Ps\PdfBundle\Templating\ImageLocator($this->get('kernel'))));
+        $instance->addExtension(new \RaulFraile\Bundle\LadybugBundle\Twig\Extension\LadybugExtension($this));
         $instance->addGlobal('app', $this->get('templating.globals'));
         $instance->addGlobal('ajax_aplicacion', array('class' => 'ajax_36ap2458e', 'div' => 'aplicacion'));
         $instance->addGlobal('ajax_div_flotante', array('class' => 'ajax_34fd114', 'div' => 'div_flotante', 'form' => 'form_a484848'));
@@ -1066,6 +1086,7 @@ class appProdProjectContainer extends Container
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/vendor/doctrine/doctrine-bundle/Doctrine/Bundle/DoctrineBundle/Resources/views', 'Doctrine');
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/src/DSS/ProyectoBundle/Resources/views', 'DSSProyecto');
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/vendor/psliwa/pdf-bundle/Ps/PdfBundle/Resources/views', 'PsPdf');
+        $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/vendor/raulfraile/ladybug-bundle/RaulFraile/Bundle/LadybugBundle/Resources/views', 'RaulFraileLadybug');
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/app/Resources/views');
         $instance->addPath('/opt/lampp/htdocs/dss_p2g05/DSS/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Resources/views/Form');
         return $instance;
@@ -1106,7 +1127,7 @@ class appProdProjectContainer extends Container
     }
     protected function getSecurity_Authentication_ManagerService()
     {
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.usuario'), new \Symfony\Component\Security\Core\User\UserChecker(), 'admin_area', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('5368981c8b28e')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('security.user.provider.concrete.usuario'), new \Symfony\Component\Security\Core\User\UserChecker(), 'admin_area', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('537b6879148bd')), true);
         $instance->setEventDispatcher($this->get('event_dispatcher'));
         return $instance;
     }
@@ -1186,6 +1207,7 @@ class appProdProjectContainer extends Container
                 'SensioFrameworkExtraBundle' => 'Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle',
                 'DSSProyectoBundle' => 'DSS\\ProyectoBundle\\DSSProyectoBundle',
                 'PsPdfBundle' => 'Ps\\PdfBundle\\PsPdfBundle',
+                'RaulFraileLadybugBundle' => 'RaulFraile\\Bundle\\LadybugBundle\\RaulFraileLadybugBundle',
             ),
             'kernel.charset' => 'UTF-8',
             'kernel.container_class' => 'appProdProjectContainer',
@@ -1670,6 +1692,16 @@ class appProdProjectContainer extends Container
             'ps_pdf.markdown_document_template_filepath' => NULL,
             'ps_pdf.document_parser_type' => 'xml',
             'ps_pdf.string_filter.bundle_based.class' => 'Ps\\PdfBundle\\PHPPdf\\Util\\BundleBasedStringFilter',
+            'ladybug.options' => array(
+                'extra_helpers' => array(
+                    0 => 'RaulFraile\\Bundle\\LadybugBundle\\DataCollector\\LadybugDataCollector:log',
+                ),
+                'theme' => 'modern',
+                'expanded' => false,
+                'silenced' => false,
+                'array_max_nesting_level' => 9,
+                'object_max_nesting_level' => 3,
+            ),
             'console.command.ids' => array(
             ),
         );

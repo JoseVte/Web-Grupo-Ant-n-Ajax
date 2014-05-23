@@ -85,7 +85,7 @@ class ContabilidadController extends Controller {
 
 
 
-        $iva = 5;
+        $iva = 21;
 
         $total_iva = $total + $total * $iva / 100;
 
@@ -208,6 +208,10 @@ class ContabilidadController extends Controller {
                     }
                 }
             }
+            
+            $stm_p = $conn->prepare('INSERT INTO Factura (Pedido_Identificador) values (:p)');
+            $stm_p->bindValue('p',$num_ped);
+            $stm_p->execute();
 
             return $this->render('DSSProyectoBundle:Gestion:result.html.twig', array('mensaje' => 'Se ha creado correctamente'));
         }

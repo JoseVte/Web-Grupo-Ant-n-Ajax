@@ -31,30 +31,64 @@ class __TwigTemplate_2f7e548b115373be352530482c5340e25ba6a6aacde444749dbb9c4d111
         echo "\" method=\"POST\" action=\"";
         echo twig_escape_filter($this->env, $this->env->getExtension('routing')->getPath("dss_proyecto_modificar_pass", array("tabla" => "usuario", "nif" => (isset($context["nif"]) ? $context["nif"] : null))), "html", null, true);
         echo "\">
-        ";
-        // line 5
-        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock((isset($context["form"]) ? $context["form"] : null), 'errors');
-        echo "
+        <div>
         ";
         // line 6
-        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock((isset($context["form"]) ? $context["form"] : null), 'rest');
+        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock($this->getAttribute((isset($context["form"]) ? $context["form"] : null), "pass"), 'label', array("label" => "Contraseña antigua: "));
         echo "
+        ";
+        // line 7
+        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock($this->getAttribute((isset($context["form"]) ? $context["form"] : null), "pass"), 'errors');
+        echo "
+        ";
+        // line 8
+        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock($this->getAttribute((isset($context["form"]) ? $context["form"] : null), "pass"), 'widget');
+        echo "
+        </div>
+        <div>
+        ";
+        // line 11
+        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock($this->getAttribute((isset($context["form"]) ? $context["form"] : null), "passNuevo"), 'label', array("label" => "Contraseña nueva: "));
+        echo "
+        ";
+        // line 12
+        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock($this->getAttribute((isset($context["form"]) ? $context["form"] : null), "passNuevo"), 'errors');
+        echo "
+        ";
+        // line 13
+        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock($this->getAttribute((isset($context["form"]) ? $context["form"] : null), "passNuevo"), 'widget');
+        echo "
+        </div>
+        <div>
+        ";
+        // line 16
+        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock($this->getAttribute((isset($context["form"]) ? $context["form"] : null), "passNuevo2"), 'label', array("label" => "Repetir contraseña nueva: "));
+        echo "
+        ";
+        // line 17
+        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock($this->getAttribute((isset($context["form"]) ? $context["form"] : null), "passNuevo2"), 'errors');
+        echo "
+        ";
+        // line 18
+        echo $this->env->getExtension('form')->renderer->searchAndRenderBlock($this->getAttribute((isset($context["form"]) ? $context["form"] : null), "passNuevo2"), 'widget');
+        echo "
+        </div>
         <input type=\"submit\" />
     ";
-        // line 8
+        // line 21
         echo         $this->env->getExtension('form')->renderer->renderBlock((isset($context["form"]) ? $context["form"] : null), 'form_end');
         echo "
         
     ";
-        // line 10
+        // line 23
         if (array_key_exists("mensaje_error", $context)) {
-            // line 11
+            // line 24
             echo "    <span class=\"error\">";
             echo twig_escape_filter($this->env, (isset($context["mensaje_error"]) ? $context["mensaje_error"] : null), "html", null, true);
             echo "</span>
     ";
         }
-        // line 13
+        // line 26
         echo "    <a style=\"cursor:pointer\" class=\"closeVentanaDeslizante\">Salir</a>
 ";
     }
@@ -71,6 +105,6 @@ class __TwigTemplate_2f7e548b115373be352530482c5340e25ba6a6aacde444749dbb9c4d111
 
     public function getDebugInfo()
     {
-        return array (  58 => 13,  52 => 11,  50 => 10,  45 => 8,  40 => 6,  36 => 5,  29 => 4,  26 => 3,);
+        return array (  92 => 26,  86 => 24,  84 => 23,  79 => 21,  73 => 18,  69 => 17,  65 => 16,  59 => 13,  55 => 12,  51 => 11,  45 => 8,  41 => 7,  37 => 6,  29 => 4,  26 => 3,);
     }
 }

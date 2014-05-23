@@ -30,8 +30,10 @@
 
     <h1>Panel de control</h1>
 
-    <br><input type="checkbox" name="imprimir" value="imprimir" title="Impresion automatica" />
-    <label id="labelImprimir"></label>
+    IVA actual: 21%
+    
+    <!--<br><input type="checkbox" name="imprimir" value="imprimir" title="Impresion automatica" />
+    <label id="labelImprimir">Impresion automatica</label>-->
     
     <br><a class="{{ajax_div_flotante.class}}" href="{{ path('dss_proyecto_modificar_email', { 'tabla': 'usuario','nif': app.security.getToken().getUser().getNif()}) }}">Cambiar Email</a>
     <br><a class="{{ajax_div_flotante.class}}" href="{{ path('dss_proyecto_modificar_pass', { 'tabla': 'usuario','nif': app.security.getToken().getUser().getNif()}) }}">Cambiar pass</a>
